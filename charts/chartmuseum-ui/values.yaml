@@ -16,4 +16,8 @@ nodeSelector: {}
 tolerations: []
 podAnnotations: {}
 
-chartmuseumURL: chartmuseum.kube-system.svc.cluster.local
+service:
+  type: ClusterIP
+  port: 8080
+
+chartmuseumURL: "http://chartmuseum.svc.cluster.local"

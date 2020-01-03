@@ -10,10 +10,13 @@ metadata:
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
 spec:
+  type: {{ .Values.service.type }}
   ports:
-  - name: chartmuseum-ui
-    protocol: TCP
-    port: 8080
+    - port: {{ .Values.service.port }}
+      targetPort: 8080
+      protocol: TCP
+      name: http
   selector:
-    app: chartmuseum-ui
+    app.kubernetes.io/name: {{ include "chartmuseum-ui.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
