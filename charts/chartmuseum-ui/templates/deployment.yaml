@@ -10,6 +10,7 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
+  replicas: {{ .Values.replicaCount }}
   template:
     metadata:
       labels:
@@ -23,7 +24,7 @@ spec:
         command: ['sh', '-c', 'until wget -q {{ .Values.chartmuseumURL }} -o /dev/null; do echo waiting for chartmuseum backend...; sleep 2; done']
       containers:
       - name: chartmuseum-ui
-        image: {{ .Values.image }}:{{ .Values.version }}
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
         ports:
         - containerPort: 8080
         envFrom:
