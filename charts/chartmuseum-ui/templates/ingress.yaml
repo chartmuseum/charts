@@ -1,0 +1,36 @@
+{{- if .Values.ingress.enabled -}}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: chartmuseum-ui
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ template "chartmuseum-ui.name" . }}
+    chart: {{ template "chartmuseum-ui.chart" . }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+  annotations:
+    {{- range $key, $value := .Values.ingress.annotations }}
+      {{ $key }}: {{ $value | quote }}
+    {{- end }}
+spec:
+  rules:
+{{- if .Values.ingress.hosts }}
+    {{- range $host := .Values.ingress.hosts }}
+    - host: {{ $host }}
+      http:
+        paths:
+          - path: {{ if $.Values.contextPath }} {{ $.Values.contextPath }} {{ else }} / {{ end }}
+            backend:
+              serviceName: chartmuseum-ui
+              servicePort: 3000
+    {{- end -}}
+{{- else }}
+    - http:
+        paths:
+          - path: {{ if .Values.contextPath }} {{ .Values.contextPath }} {{ else }} / {{ end }}
+            backend:
+              serviceName: chartmuseum-ui
+              servicePort: 3000
+{{- end }}
+{{- end -}}

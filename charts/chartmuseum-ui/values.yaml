@@ -6,7 +6,7 @@ image:
   tag: latest
 
 ingress:
-  enabled: false
+  enabled: true
   hosts:
     - chartmuseum-ui.local
   annotations: {}
