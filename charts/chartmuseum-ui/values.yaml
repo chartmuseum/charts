@@ -20,4 +20,7 @@ service:
   type: ClusterIP
   port: 8080
 
-chartmuseumURL: "http://chartmuseum.svc.cluster.local"
+envVars:
+  CHART_MUSESUM_URL: "http://chartmuseum.svc.cluster.local"
+  CHART_MUSESUM_API_GET_CHARTS:
+  BASIC_AUTH_USERS: '[{"username":"admin", "password":"password"}, {"username":"user", "password":"s3cr3t"}]'

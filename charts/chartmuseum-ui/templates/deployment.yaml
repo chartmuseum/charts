@@ -21,7 +21,7 @@ spec:
       initContainers:
       - name: verify-dependencies
         image: busybox
-        command: ['sh', '-c', 'until wget -q {{ .Values.chartmuseumURL }} -o /dev/null; do echo waiting for chartmuseum backend...; sleep 2; done']
+        command: ['sh', '-c', 'until wget -q {{ .Values.envVars.CHART_MUSESUM_URL }} -o /dev/null; do echo waiting for chartmuseum backend...; sleep 2; done']
       containers:
       - name: chartmuseum-ui
         image: {{ .Values.image.repository }}:{{ .Values.image.tag }}

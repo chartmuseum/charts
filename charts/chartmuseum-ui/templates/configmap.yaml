@@ -5,5 +5,7 @@ kind: ConfigMap
 metadata:  
   name: {{ template "chartmuseum-ui.name" . }}-vars
 data:
-  CHART_MUSESUM_URL: "{{ .Values.chartmuseumURL }}"
+  {{- range $key, $value := .Values.envVars }}
+  {{ $key }}: {{ tpl ($value | quote) $ }}
+  {{- end }}
 {{- end }}
