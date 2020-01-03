@@ -1,0 +1,33 @@
+{{- if .Values.enabled }}
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: chartmuseum-ui
+  labels:
+    app: {{ template "chartmuseum-ui.name" . }}
+    chart: {{ template "chartmuseum-ui.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  template:
+    metadata:
+      labels:
+        app: chartmuseum-ui
+      annotations:
+        sidecar.istio.io/inject: "false"
+    spec:
+      initContainers:
+      - name: verify-dependencies
+        image: busybox
+        command: ['sh', '-c', 'until wget -q {{ .Values.chartmuseumURL }} -o /dev/null; do echo waiting for chartmuseum backend...; sleep 2; done']
+      containers:
+      - name: chartmuseum-ui
+        image: {{ .Values.image }}:{{ .Values.version }}
+        ports:
+        - containerPort: 8080
+        envFrom:
+        - configMapRef:
+            name: {{ template "chartmuseum-ui.name" . }}-vars
+
+{{- end }}

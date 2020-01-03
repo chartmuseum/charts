@@ -1,0 +1,11 @@
+enabled: true
+version: latest
+
+image: idobry/chartmuseumui
+
+
+nodeSelector: {}
+tolerations: []
+podAnnotations: {}
+
+chartmuseumURL: chartmuseum-service
