@@ -1,3 +1,0 @@
-# charts/chartmuseum-ui/values.yaml for detailed configuration
-chartmuseum-ui:
-  enabled: true
