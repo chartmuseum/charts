@@ -1,0 +1,19 @@
+apiVersion: v1
+entries:
+  chartmuseum:
+  - apiVersion: v1
+    appVersion: 0.12.0
+    created: "2020-11-19T00:00:33.452886907Z"
+    description: Host your own Helm Chart Repository
+    digest: 0349396f909234cdb633bd7de839bb061bea1d7632a9cf9acf03ce78cf14cc6f
+    home: https://github.com/helm/chartmuseum
+    icon: https://raw.githubusercontent.com/helm/chartmuseum/master/logo2.png
+    keywords:
+    - chartmuseum
+    - helm
+    - charts repo
+    name: chartmuseum
+    urls:
+    - https://github.com/chartmuseum/charts/releases/download/chartmuseum-2.14.2/chartmuseum-2.14.2.tgz
+    version: 2.14.2
+generated: "2020-11-19T00:00:33.322785577Z"
