@@ -1,5 +1,7 @@
 # ChartMuseum Helm Chart
 
+[![Artifact HUB](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/chartmuseum)](https://artifacthub.io/packages/search?repo=chartmuseum)
+
 Deploy your own private ChartMuseum.
 
 Please also see https://github.com/helm/chartmuseum
