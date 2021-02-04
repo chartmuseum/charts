@@ -6,8 +6,8 @@ strategy:
   rollingUpdate:
     maxUnavailable: 0
 image:
-  repository: chartmuseum/chartmuseum
-  tag: v0.12.0
+  repository: ghcr.io/helm/chartmuseum
+  tag: v0.13.0
   pullPolicy: IfNotPresent
 secret:
   labels: {}
