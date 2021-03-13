@@ -11,13 +11,15 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: {{ include "chartmuseum.fullname" . }}
+  {{- with .Values.ingress.annotations }}
   annotations:
-{{ toYaml .Values.ingress.annotations | indent 4 }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
   labels:
-{{- if .Values.ingress.labels }}
-{{ toYaml .Values.ingress.labels | indent 4 }}
-{{- end }}
-{{ include "chartmuseum.labels.standard" . | indent 4 }}
+    {{- include "chartmuseum.labels" . | nindent 4 }}
+    {{- with .Values.ingress.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
 spec:
   rules:
   {{- range .Values.ingress.hosts }}

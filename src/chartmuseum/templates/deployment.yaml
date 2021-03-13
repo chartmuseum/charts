@@ -2,41 +2,31 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "chartmuseum.fullname" . }}
+  {{- with .Values.deployment.annotations }}
   annotations:
-{{ toYaml .Values.deployment.annotations | indent 4 }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
   labels:
-{{ include "chartmuseum.labels.standard" . | indent 4 }}
-{{- if .Values.deployment.labels }}
-{{ toYaml .Values.deployment.labels | indent 4 }}
-{{- end }}
+    {{- include "chartmuseum.labels" . | nindent 4 }}
+    {{- if .Values.deployment.labels }}
+    {{- toYaml .Values.deployment.labels | nindent 4 }}
+    {{- end }}
 spec:
   selector:
     matchLabels:
-      app: {{ template "chartmuseum.name" . }}
-      release: {{ .Release.Name | quote }}
-{{- if .Values.deployment.labels }}
-{{ toYaml .Values.deployment.labels | indent 6 }}
-{{- end }}
+      {{- include "chartmuseum.selectorLabels" . | nindent 6 }}
   replicas: {{ .Values.replicaCount }}
   strategy:
 {{ toYaml .Values.strategy | indent 4 }}
   revisionHistoryLimit: 10
-{{- if .Values.deployment.matchlabes }}
-  selector:
-    matchLabels:
-{{ toYaml .Values.deployment.matchlabels | indent 6 }}
-{{- end }}
   template:
     metadata:
-      name: {{ include "chartmuseum.fullname" . }}
+      {{- with .Values.podAnnotations }}
       annotations:
-{{ toYaml .Values.replica.annotations | indent 8 }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       labels:
-        app: {{ template "chartmuseum.name" . }}
-        release: {{ .Release.Name | quote }}
-{{- if .Values.deployment.labels }}
-{{ toYaml .Values.deployment.labels | indent 8 }}
-{{- end }}
+        {{- include "chartmuseum.selectorLabels" . | nindent 8 }}
     spec:
       {{- if .Values.priorityClassName }}
       priorityClassName: "{{ .Values.priorityClassName }}"
@@ -170,16 +160,11 @@ spec:
       tolerations:
 {{ toYaml . | indent 8 }}
     {{- end }}
-    {{- if .Values.deployment.schedulerName }}
-      schedulerName: {{ .Values.deployment.schedulerName }}
-    {{- end -}}
-    {{- if and .Values.serviceAccount.create .Values.serviceAccount.name }}
-      serviceAccountName: {{ .Values.serviceAccount.name }}
-    {{- else if .Values.serviceAccount.create }}
-      serviceAccountName: {{ include "chartmuseum.fullname" . }}
-    {{- else if .Values.serviceAccount.name }}
-      serviceAccountName: {{ .Values.serviceAccount.name }}
+    {{- if .Values.schedulerName }}
+      schedulerName: {{ .Values.schedulerName }}
     {{- end }}
+      serviceAccountName: {{ include "chartmuseum.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.serviceAccount.automountServiceAccountToken }}
       volumes:
       - name: storage-volume
       {{- if .Values.persistence.enabled }}
@@ -187,23 +172,23 @@ spec:
           claimName: {{ .Values.persistence.existingClaim | default (include "chartmuseum.fullname" .) }}
       {{- else }}
         emptyDir: {}
-      {{- end -}}
+      {{- end }}
       {{ if .Values.gcp.secret.enabled }}
       - name: {{ include "chartmuseum.fullname" . }}-gcp
         secret:
-      {{ if .Values.env.secret.GOOGLE_CREDENTIALS_JSON }}
+      {{- if .Values.env.secret.GOOGLE_CREDENTIALS_JSON }}
           secretName: {{ include "chartmuseum.fullname" . }}
           items:
           - key: GOOGLE_CREDENTIALS_JSON
             path: credentials.json
-      {{ else }}
+      {{- else }}
           secretName: {{ .Values.gcp.secret.name }}
           items:
           - key: {{ .Values.gcp.secret.key }}
             path: credentials.json
-      {{ end }}
-      {{ end }}
-      {{ if .Values.oracle.secret.enabled }}
+      {{- end }}
+      {{- end }}
+      {{- if .Values.oracle.secret.enabled }}
       - name: {{ include "chartmuseum.fullname" . }}-oracle
         secret:
           secretName: {{ .Values.oracle.secret.name }}

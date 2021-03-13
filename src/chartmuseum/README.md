@@ -92,13 +92,10 @@ their default values. See values.yaml for all available options.
 | `volumePermissions.image.tag`           | Init container volume-permissions image tag                                 | `buster`                             |
 | `volumePermissions.image.pullPolicy`    | Init container volume-permissions image pull policy                         | `Always`                             |
 | `replicaCount`                          | k8s replicas                                                                | `1`                                  |
-| `resources.limits.cpu`                  | Container maximum CPU                                                       | `100m`                               |
-| `resources.limits.memory`               | Container maximum memory                                                    | `128Mi`                              |
-| `resources.requests.cpu`                | Container requested CPU                                                     | `80m`                                |
-| `resources.requests.memory`             | Container requested memory                                                  | `64Mi`                               |
-| `secret.labels`                         | Additional labels for secret                                                | `false`                              |
+| `resources`                             | CPU/Memory resource requests and limits                                     | `{}`                                 |
+| `secret.labels`                         | Additional labels for secret                                                | `{}`                                 |
 | `serviceAccount.create`                 | If true, create the service account                                         | `false`                              |
-| `serviceAccount.name`                   | Name of the serviceAccount to create or use                                 | `{{ chartmuseum.fullname }}`         |
+| `serviceAccount.name`                   | Name of the serviceAccount to create or use                                 | `""`                                 |
 | `serviceAccount.annotations`            | Additional Service Account annotations                                      | `{}`                                 |
 | `securityContext.enabled`               | Enable securityContext                                                      | `true`                               |
 | `securityContext.fsGroup`               | Group ID for the container                                                  | `1000`                               |
@@ -109,7 +106,7 @@ their default values. See values.yaml for all available options.
 | `nodeSelector`                          | Map of node labels for pod assignment                                       | `{}`                                 |
 | `tolerations`                           | List of node taints to tolerate                                             | `[]`                                 |
 | `affinity`                              | Map of node/pod affinities                                                  | `{}`                                 |
-| `schedulerName`                         | Kubernetes scheduler to use                                                 | `default`                            |
+| `schedulerName`                         | Kubernetes scheduler to use                                                 | `<nil>` (Uses default scheduler)     |
 | `env.open.STORAGE`                      | Storage Backend to use                                                      | `local`                              |
 | `env.open.STORAGE_ALIBABA_BUCKET`       | Bucket to store charts in for Alibaba                                       | ``                                   |
 | `env.open.STORAGE_ALIBABA_PREFIX`       | Prefix to store charts under for Alibaba                                    | ``                                   |
@@ -150,14 +147,14 @@ their default values. See values.yaml for all available options.
 | `env.open.BEARER_AUTH`                  | Enable bearer auth                                                          | `false`                              |
 | `env.open.AUTH_REALM`                   | Realm used for bearer authentication                                        | ``                                   |
 | `env.open.AUTH_SERVICE`                 | Service used for bearer authentication                                      | ``                                   |
-| `env.field`                             | Expose pod information to containers through environment variables          | ``                                   |
+| `env.field`                             | Expose pod information to containers through environment variables          | `{}`                                 |
 | `env.existingSecret`                    | Name of the existing secret use values                                      | ``                                   |
 | `env.existingSecret.BASIC_AUTH_USER`    | Key name in the secret for the Username                                     | ``                                   |
 | `env.existingSecret.BASIC_AUTH_PASS`    | Key name in the secret for the Password                                     | ``                                   |
 | `env.secret.BASIC_AUTH_USER`            | Username for basic HTTP authentication                                      | ``                                   |
 | `env.secret.BASIC_AUTH_PASS`            | Password for basic HTTP authentication                                      | ``                                   |
 | `env.secret.CACHE_REDIS_PASSWORD`       | Redis requirepass server configuration                                      | ``                                   |
-| `extraArgs`                             | Pass extra arguments to the chartmuseum binary                              | ``                                   |
+| `extraArgs`                             | Pass extra arguments to the chartmuseum binary                              | `[]`                                 |
 | `gcp.secret.enabled`                    | Flag for the GCP service account                                            | `false`                              |
 | `gcp.secret.name`                       | Secret name for the GCP json file                                           | ``                                   |
 | `gcp.secret.key`                        | Secret key for te GCP json file                                             | `credentials.json`                   |
@@ -180,10 +177,10 @@ their default values. See values.yaml for all available options.
 | `serviceMonitor.interval`               | Scrape interval, If not set, the Prometheus default scrape interval is used | `nil`                                |
 | `serviceMonitor.timeout`                | Scrape request timeout. If not set, the Prometheus default timeout is used  | `nil`                                |
 | `deployment.labels`                     | Additional labels for deployment                                            | `{}`                                 |
-| `deployment.matchlabes`                 | Match labels for deployment selector                                        | `{}`                                 |
+| `podAnnotations`                        | Annotations for pods                                                        | `{}`                                 |
 | `ingress.enabled`                       | Enable ingress controller resource                                          | `false`                              |
-| `ingress.annotations`                   | Ingress annotations                                                         | `[]`                                 |
-| `ingress.labels`                        | Ingress labels                                                              | `[]`                                 |
+| `ingress.annotations`                   | Ingress annotations                                                         | `{}`                                 |
+| `ingress.labels`                        | Ingress labels                                                              | `{}`                                 |
 | `ingress.hosts[0].name`                 | Hostname for the ingress                                                    | ``                                   |
 | `ingress.hosts[0].path`                 | Path within the url structure                                               | ``                                   |
 | `ingress.hosts[0].tls `                 | Enable TLS on the ingress host                                              | `false`                              |
@@ -295,9 +292,8 @@ env:
     STORAGE_AMAZON_BUCKET: my-s3-bucket
     STORAGE_AMAZON_PREFIX:
     STORAGE_AMAZON_REGION: us-east-1
-replica:
-  annotations:
-    iam.amazonaws.com/role: "{assumed role name}"
+podAnnotations:
+  iam.amazonaws.com/role: "{assumed role name}"
 ```
 
 Run command to install

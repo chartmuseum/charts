@@ -1,77 +1,30 @@
-{{- /*
-name defines a template for the name of the chartmuseum chart.
+{{/*
+Expand the name of the chart.
+*/}}
+{{- define "chartmuseum.name" -}}
+{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
+{{- end }}
 
-The prevailing wisdom is that names should only contain a-z, 0-9 plus dot (.) and dash (-), and should
-not exceed 63 characters.
-
-Parameters:
-
-- .Values.nameOverride: Replaces the computed name with this given name
-- .Values.namePrefix: Prefix
-- .Values.global.namePrefix: Global prefix
-- .Values.nameSuffix: Suffix
-- .Values.global.nameSuffix: Global suffix
-
-The applied order is: "global prefix + prefix + name + suffix + global suffix"
-
-Usage: 'name: "{{- template "chartmuseum.name" . -}}"'
-*/ -}}
-{{- define "chartmuseum.name"}}
-{{- $global := default (dict) .Values.global -}}
-{{- $base := default .Chart.Name .Values.nameOverride -}}
-{{- $gpre := default "" $global.namePrefix -}}
-{{- $pre := default "" .Values.namePrefix -}}
-{{- $suf := default "" .Values.nameSuffix -}}
-{{- $gsuf := default "" $global.nameSuffix -}}
-{{- $name := print $gpre $pre $base $suf $gsuf -}}
-{{- $name | lower | trunc 54 | trimSuffix "-" -}}
-{{- end -}}
+{{/*
+Create a default fully qualified app name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+If release name contains chart name it will be used as a full name.
+*/}}
+{{- define "chartmuseum.fullname" -}}
+{{- if .Values.fullnameOverride }}
+{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
+{{- else }}
+{{- $name := default .Chart.Name .Values.nameOverride }}
+{{- if contains $name .Release.Name }}
+{{- .Release.Name | trunc 63 | trimSuffix "-" }}
+{{- else }}
+{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" }}
+{{- end }}
+{{- end }}
+{{- end }}
 
 {{- /*
-fullname defines a suitably unique name for a resource by combining
-the release name and the chartmuseum chart name.
-
-The prevailing wisdom is that names should only contain a-z, 0-9 plus dot (.) and dash (-), and should
-not exceed 63 characters.
-
-Parameters:
-
-- .Values.fullnameOverride: Replaces the computed name with this given name
-- .Values.fullnamePrefix: Prefix
-- .Values.global.fullnamePrefix: Global prefix
-- .Values.fullnameSuffix: Suffix
-- .Values.global.fullnameSuffix: Global suffix
-
-The applied order is: "global prefix + prefix + name + suffix + global suffix"
-
-Usage: 'name: "{{- template "chartmuseum.fullname" . -}}"'
-*/ -}}
-{{- define "chartmuseum.fullname"}}
-{{- $global := default (dict) .Values.global -}}
-{{- $base := default (printf "%s-%s" .Release.Name .Chart.Name) .Values.fullnameOverride -}}
-{{- $gpre := default "" $global.fullnamePrefix -}}
-{{- $pre := default "" .Values.fullnamePrefix -}}
-{{- $suf := default "" .Values.fullnameSuffix -}}
-{{- $gsuf := default "" $global.fullnameSuffix -}}
-{{- $name := print $gpre $pre $base $suf $gsuf -}}
-{{- $name | lower | trunc 54 | trimSuffix "-" -}}
-{{- end -}}
-
-
-{{- /*
-chartmuseum.labels.standard prints the standard chartmuseum Helm labels.
-
-The standard labels are frequently used in metadata.
-*/ -}}
-{{- define "chartmuseum.labels.standard" -}}
-app: {{ template "chartmuseum.name" . }}
-chart: {{ template "chartmuseum.chartref" . }}
-heritage: {{ .Release.Service | quote }}
-release: {{ .Release.Name | quote }}
-{{- end -}}
-
-{{- /*
-chartmuseum.chartref prints a chart name and version.
+Create chart name and version as used by the chart label.
 
 It does minimal escaping for use in Kubernetes labels.
 
@@ -79,9 +32,40 @@ Example output:
 
 chartmuseum-0.4.5
 */ -}}
-{{- define "chartmuseum.chartref" -}}
-{{- replace "+" "_" .Chart.Version | printf "%s-%s" .Chart.Name -}}
+{{- define "chartmuseum.chart" -}}
+{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end -}}
+
+{{/*
+Common labels
+*/}}
+{{- define "chartmuseum.labels" -}}
+helm.sh/chart: {{ include "chartmuseum.chart" . }}
+{{ include "chartmuseum.selectorLabels" . }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end }}
+
+{{/*
+Selector labels
+*/}}
+{{- define "chartmuseum.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "chartmuseum.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
+{{/*
+Create the name of the service account to use
+*/}}
+{{- define "chartmuseum.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create }}
+{{- default (include "chartmuseum.fullname" .) .Values.serviceAccount.name }}
+{{- else }}
+{{- default "default" .Values.serviceAccount.name }}
+{{- end }}
+{{- end }}
 
 {{/*
 Return the proper image name to change the volume permissions
