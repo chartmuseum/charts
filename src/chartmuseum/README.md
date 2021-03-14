@@ -39,6 +39,8 @@ Please also see https://github.com/helm/chartmuseum
       - [Annotations](#annotations)
       - [Example Ingress configuration](#example-ingress-configuration)
   - [Uninstall](#uninstall)
+  - [Upgrading](#upgrading)
+    - [To 3.0.0](#to-300)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -749,3 +751,13 @@ To delete the deployment and its history:
 ```shell
 helm delete --purge my-chartmuseum
 ```
+
+## Upgrading
+
+### To 3.0.0
+
+* This is a breaking change which only supports Helm v3.0.0+ now. If you still use helm v2, please consider upgrading because v2 is EOL for quite a while.  
+  * To migrate to helm v3 please have a look at the [Helm 2to3 Plugin](https://github.com/helm/helm-2to3). This tool will convert the existing ConfigMap used for Tiller to a Secret of type `helm.sh/release.v1`.
+  * When you are using object storage for persistence (instead of a PVC), you can simply uninstall your helm v2 release and perform a fresh installation with helm v3 without using the `2to3` plugin.
+* We now follow the official Kubernetes [label recommendations](https://kubernetes.io/docs/concepts/overview/working-with-objects/common-labels/).  
+  To upgrade an existing installation, please **add the `--force` parameter** to the `helm upgrade` command or **delete the Deployment resource** before you upgrade. This is necessary becase Deployment's label selector is immutable.
