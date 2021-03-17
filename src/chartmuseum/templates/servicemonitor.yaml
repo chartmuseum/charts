@@ -2,15 +2,13 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-{{- if .Values.serviceMonitor.labels }}
+  name: {{ include "chartmuseum.fullname" . }}
+  namespace: {{ .Values.serviceMonitor.namespace | default .Release.Namespace }}
   labels:
-{{ toYaml .Values.serviceMonitor.labels | indent 4 }}
-{{- end }}
-  name: {{ template "chartmuseum.fullname" . }}
-  namespace: {{ .Release.Namespace }}
-{{- if .Values.serviceMonitor.namespace }}
-  namespace: {{ .Values.serviceMonitor.namespace }}
-{{- end }}
+    {{- include "chartmuseum.labels" . | nindent 4 }}
+    {{- with .Values.serviceMonitor.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
 spec:
   endpoints:
   - targetPort: 8080
@@ -23,12 +21,11 @@ spec:
 {{- if .Values.serviceMonitor.timeout }}
     scrapeTimeout: {{ .Values.serviceMonitor.timeout }}
 {{- end }}
-  jobLabel: {{ template "chartmuseum.fullname" . }}
+  jobLabel: {{ include "chartmuseum.fullname" . }}
   namespaceSelector:
     matchNames:
     - {{ .Release.Namespace }}
   selector:
     matchLabels:
-      app: {{ template "chartmuseum.name" . }}
-      release: {{ .Release.Name }}
+      {{- include "chartmuseum.selectorLabels" . | nindent 6 }}
 {{- end }}
