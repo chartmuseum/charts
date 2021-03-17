@@ -39,12 +39,15 @@ Please also see https://github.com/helm/chartmuseum
       - [Annotations](#annotations)
       - [Example Ingress configuration](#example-ingress-configuration)
   - [Uninstall](#uninstall)
+  - [Upgrading](#upgrading)
+    - [To 3.0.0](#to-300)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 
 ## Prerequisites
 
+* Helm v3.0.0+
 * [If enabled] A persistent storage resource and RW access to it
 * [If enabled] Kubernetes StorageClass for dynamic provisioning
 
@@ -79,60 +82,57 @@ their default values. See values.yaml for all available options.
 | `persistence.path`                      | PV mount path                                                               | `/storage`                           |
 | `persistence.size`                      | Amount of space to claim for PVC                                            | `8Gi`                                |
 | `persistence.labels`                    | Additional labels for PVC                                                   | `{}`                                 |
-| `persistence.storageClass`              | Storage Class to use for PVC                                                | `-`                                  |
-| `persistence.volumeName`                | Volume to use for PVC                                                       | ``                                   |
+| `persistence.storageClass`              | Storage Class to use for PVC                                                | `undefined` (Uses default provisioner)|
+| `persistence.volumeName`                | Volume to use for PVC                                                       | `undefined`                          |
 | `persistence.pv.enabled`                | Whether to use a PV for persistent storage                                  | `false`                              |
 | `persistence.pv.capacity.storage`       | Storage size to use for PV                                                  | `8Gi`                                |
 | `persistence.pv.accessMode`             | Access mode to use for PV                                                   | `ReadWriteOnce`                      |
-| `persistence.pv.nfs.server`             | NFS server for PV                                                           | ``                                   |
-| `persistence.pv.nfs.path`               | Storage Path                                                                | ``                                   |
-| `persistence.pv.pvname`                 | Custom name for private volume                                              | ``                                   |
+| `persistence.pv.nfs.server`             | NFS server for PV                                                           | `<nil>`                              |
+| `persistence.pv.nfs.path`               | Storage Path                                                                | `<nil>`                              |
+| `persistence.pv.pvname`                 | Custom name for private volume                                              | `<nil>`                              |
 | `volumePermissions.image.registry`      | Init container volume-permissions image registry                            | `docker.io`                          |
 | `volumePermissions.image.repository`    | Init container volume-permissions image name                                | `bitnami/minideb`                    |
 | `volumePermissions.image.tag`           | Init container volume-permissions image tag                                 | `buster`                             |
 | `volumePermissions.image.pullPolicy`    | Init container volume-permissions image pull policy                         | `Always`                             |
 | `replicaCount`                          | k8s replicas                                                                | `1`                                  |
-| `resources.limits.cpu`                  | Container maximum CPU                                                       | `100m`                               |
-| `resources.limits.memory`               | Container maximum memory                                                    | `128Mi`                              |
-| `resources.requests.cpu`                | Container requested CPU                                                     | `80m`                                |
-| `resources.requests.memory`             | Container requested memory                                                  | `64Mi`                               |
-| `secret.labels`                         | Additional labels for secret                                                | `false`                              |
+| `resources`                             | CPU/Memory resource requests and limits                                     | `{}`                                 |
+| `secret.labels`                         | Additional labels for secret                                                | `{}`                                 |
 | `serviceAccount.create`                 | If true, create the service account                                         | `false`                              |
-| `serviceAccount.name`                   | Name of the serviceAccount to create or use                                 | `{{ chartmuseum.fullname }}`         |
+| `serviceAccount.name`                   | Name of the serviceAccount to create or use                                 | `""`                                 |
 | `serviceAccount.annotations`            | Additional Service Account annotations                                      | `{}`                                 |
 | `securityContext.enabled`               | Enable securityContext                                                      | `true`                               |
 | `securityContext.fsGroup`               | Group ID for the container                                                  | `1000`                               |
-| `securityContext.runAsNonRoot`          | Running Pods as non-root                                                    | ``                                   |
-| `securityContext.supplementalGroups`    | Control which group IDs containers add                                      | ``                                   |
-| `containerSecurityContext`              | Additional Container securityContext (ex. allowPrivilegeEscalation)         | `{}`                                 |
+| `securityContext.runAsNonRoot`          | Running Pods as non-root                                                    | `undefined`                          |
+| `securityContext.supplementalGroups`    | Control which group IDs containers add                                      | `undefined`                          |
+| `containerSecurityContext`              | Additional Container securityContext (e.g. allowPrivilegeEscalation)        | `{}`                                 |
 | `priorityClassName      `               | priorityClassName                                                           | `""`                                 |
 | `nodeSelector`                          | Map of node labels for pod assignment                                       | `{}`                                 |
 | `tolerations`                           | List of node taints to tolerate                                             | `[]`                                 |
 | `affinity`                              | Map of node/pod affinities                                                  | `{}`                                 |
-| `schedulerName`                         | Kubernetes scheduler to use                                                 | `default`                            |
+| `schedulerName`                         | Kubernetes scheduler to use                                                 | `<nil>` (Uses default scheduler)     |
 | `env.open.STORAGE`                      | Storage Backend to use                                                      | `local`                              |
-| `env.open.STORAGE_ALIBABA_BUCKET`       | Bucket to store charts in for Alibaba                                       | ``                                   |
-| `env.open.STORAGE_ALIBABA_PREFIX`       | Prefix to store charts under for Alibaba                                    | ``                                   |
-| `env.open.STORAGE_ALIBABA_ENDPOINT`     | Alternative Alibaba endpoint                                                | ``                                   |
-| `env.open.STORAGE_ALIBABA_SSE`          | Server side encryption algorithm to use                                     | ``                                   |
-| `env.open.STORAGE_AMAZON_BUCKET`        | Bucket to store charts in for AWS                                           | ``                                   |
-| `env.open.STORAGE_AMAZON_ENDPOINT`      | Alternative AWS endpoint                                                    | ``                                   |
-| `env.open.STORAGE_AMAZON_PREFIX`        | Prefix to store charts under for AWS                                        | ``                                   |
-| `env.open.STORAGE_AMAZON_REGION`        | Region to use for bucket access for AWS                                     | ``                                   |
-| `env.open.STORAGE_AMAZON_SSE`           | Server side encryption algorithm to use                                     | ``                                   |
-| `env.open.STORAGE_GOOGLE_BUCKET`        | Bucket to store charts in for GCP                                           | ``                                   |
-| `env.open.STORAGE_GOOGLE_PREFIX`        | Prefix to store charts under for GCP                                        | ``                                   |
-| `env.open.STORAGE_MICROSOFT_CONTAINER`  | Container to store charts under for MS                                      | ``                                   |
-| `env.open.STORAGE_MICROSOFT_PREFIX`     | Prefix to store charts under for MS                                         | ``                                   |
-| `env.open.STORAGE_OPENSTACK_CONTAINER`  | Container to store charts for openstack                                     | ``                                   |
-| `env.open.STORAGE_OPENSTACK_PREFIX`     | Prefix to store charts for openstack                                        | ``                                   |
-| `env.open.STORAGE_OPENSTACK_REGION`     | Region of openstack container                                               | ``                                   |
-| `env.open.STORAGE_OPENSTACK_CACERT`     | Path to a CA cert bundle for openstack                                      | ``                                   |
-| `env.open.STORAGE_ORACLE_COMPARTMENTID` | Compartment ID for Oracle Object Store                                      | ``                                   |
-| `env.open.STORAGE_ORACLE_BUCKET`        | Bucket to store charts in Oracle Object Store                               | ``                                   |
-| `env.open.STORAGE_ORACLE_PREFIX`        | Prefix to store charts for Oracle object Store                              | ``                                   |
-| `env.open.CHART_POST_FORM_FIELD_NAME`   | Form field to query for chart file content                                  | ``                                   |
-| `env.open.PROV_POST_FORM_FIELD_NAME`    | Form field to query for chart provenance                                    | ``                                   |
+| `env.open.STORAGE_ALIBABA_BUCKET`       | Bucket to store charts in for Alibaba                                       | `<nil>`                              |
+| `env.open.STORAGE_ALIBABA_PREFIX`       | Prefix to store charts under for Alibaba                                    | `<nil>`                              |
+| `env.open.STORAGE_ALIBABA_ENDPOINT`     | Alternative Alibaba endpoint                                                | `<nil>`                              |
+| `env.open.STORAGE_ALIBABA_SSE`          | Server side encryption algorithm to use                                     | `<nil>`                              |
+| `env.open.STORAGE_AMAZON_BUCKET`        | Bucket to store charts in for AWS                                           | `<nil>`                              |
+| `env.open.STORAGE_AMAZON_ENDPOINT`      | Alternative AWS endpoint                                                    | `<nil>`                              |
+| `env.open.STORAGE_AMAZON_PREFIX`        | Prefix to store charts under for AWS                                        | `<nil>`                              |
+| `env.open.STORAGE_AMAZON_REGION`        | Region to use for bucket access for AWS                                     | `<nil>`                              |
+| `env.open.STORAGE_AMAZON_SSE`           | Server side encryption algorithm to use                                     | `<nil>`                              |
+| `env.open.STORAGE_GOOGLE_BUCKET`        | Bucket to store charts in for GCP                                           | `<nil>`                              |
+| `env.open.STORAGE_GOOGLE_PREFIX`        | Prefix to store charts under for GCP                                        | `<nil>`                              |
+| `env.open.STORAGE_MICROSOFT_CONTAINER`  | Container to store charts under for MS                                      | `<nil>`                              |
+| `env.open.STORAGE_MICROSOFT_PREFIX`     | Prefix to store charts under for MS                                         | `<nil>`                              |
+| `env.open.STORAGE_OPENSTACK_CONTAINER`  | Container to store charts for openstack                                     | `<nil>`                              |
+| `env.open.STORAGE_OPENSTACK_PREFIX`     | Prefix to store charts for openstack                                        | `<nil>`                              |
+| `env.open.STORAGE_OPENSTACK_REGION`     | Region of openstack container                                               | `<nil>`                              |
+| `env.open.STORAGE_OPENSTACK_CACERT`     | Path to a CA cert bundle for openstack                                      | `<nil>`                              |
+| `env.open.STORAGE_ORACLE_COMPARTMENTID` | Compartment ID for Oracle Object Store                                      | `<nil>`                              |
+| `env.open.STORAGE_ORACLE_BUCKET`        | Bucket to store charts in Oracle Object Store                               | `<nil>`                              |
+| `env.open.STORAGE_ORACLE_PREFIX`        | Prefix to store charts for Oracle object Store                              | `<nil>`                              |
+| `env.open.CHART_POST_FORM_FIELD_NAME`   | Form field to query for chart file content                                  | `chart`                              |
+| `env.open.PROV_POST_FORM_FIELD_NAME`    | Form field to query for chart provenance                                    | `prov`                               |
 | `env.open.DEPTH`                        | levels of nested repos for multitenancy.                                    | `0`                                  |
 | `env.open.DEBUG`                        | Show debug messages                                                         | `false`                              |
 | `env.open.LOG_JSON`                     | Output structured logs in JSON                                              | `true`                               |
@@ -140,59 +140,73 @@ their default values. See values.yaml for all available options.
 | `env.open.DISABLE_METRICS`              | Disable Prometheus metrics                                                  | `true`                               |
 | `env.open.DISABLE_API`                  | Disable all routes prefixed with /api                                       | `true`                               |
 | `env.open.ALLOW_OVERWRITE`              | Allow chart versions to be re-uploaded                                      | `false`                              |
-| `env.open.CHART_URL`                    | Absolute url for .tgzs in index.yaml                                        | ``                                   |
+| `env.open.CHART_URL`                    | Absolute url for .tgzs in index.yaml                                        | `<nil>`                              |
 | `env.open.AUTH_ANONYMOUS_GET`           | Allow anon GET operations when auth is used                                 | `false`                              |
-| `env.open.CONTEXT_PATH`                 | Set the base context path                                                   | ``                                   |
-| `env.open.INDEX_LIMIT`                  | Parallel scan limit for the repo indexer                                    | ``                                   |
-| `env.open.CACHE`                        | Cache store, can be one of: redis                                           | ``                                   |
-| `env.open.CACHE_REDIS_ADDR`             | Address of Redis service (host:port)                                        | ``                                   |
+| `env.open.CONTEXT_PATH`                 | Set the base context path                                                   | `<nil>`                              |
+| `env.open.INDEX_LIMIT`                  | Parallel scan limit for the repo indexer                                    | `0`                                  |
+| `env.open.CACHE`                        | Cache store, can be one of: redis                                           | `<nil>`                              |
+| `env.open.CACHE_REDIS_ADDR`             | Address of Redis service (host:port)                                        | `<nil>`                              |
 | `env.open.CACHE_REDIS_DB`               | Redis database to be selected after connect                                 | `0`                                  |
 | `env.open.BEARER_AUTH`                  | Enable bearer auth                                                          | `false`                              |
-| `env.open.AUTH_REALM`                   | Realm used for bearer authentication                                        | ``                                   |
-| `env.open.AUTH_SERVICE`                 | Service used for bearer authentication                                      | ``                                   |
-| `env.field`                             | Expose pod information to containers through environment variables          | ``                                   |
-| `env.existingSecret`                    | Name of the existing secret use values                                      | ``                                   |
-| `env.existingSecret.BASIC_AUTH_USER`    | Key name in the secret for the Username                                     | ``                                   |
-| `env.existingSecret.BASIC_AUTH_PASS`    | Key name in the secret for the Password                                     | ``                                   |
-| `env.secret.BASIC_AUTH_USER`            | Username for basic HTTP authentication                                      | ``                                   |
-| `env.secret.BASIC_AUTH_PASS`            | Password for basic HTTP authentication                                      | ``                                   |
-| `env.secret.CACHE_REDIS_PASSWORD`       | Redis requirepass server configuration                                      | ``                                   |
-| `extraArgs`                             | Pass extra arguments to the chartmuseum binary                              | ``                                   |
+| `env.open.AUTH_REALM`                   | Realm used for bearer authentication                                        | `<nil>`                              |
+| `env.open.AUTH_SERVICE`                 | Service used for bearer authentication                                      | `<nil>`                              |
+| `env.field`                             | Expose pod information to containers through environment variables          | `{}`                                 |
+| `env.existingSecret`                    | Name of the existing secret use values                                      | `<nil>`                              |
+| `env.existingSecretMappings.BASIC_AUTH_USER`         | Key name in the secret for the Username                        | `<nil>`                              |
+| `env.existingSecretMappings.BASIC_AUTH_PASS`         | Key name in the secret for the Password                        | `<nil>`                              |
+| `env.existingSecretMappings.GOOGLE_CREDENTIALS_JSON` | Key name in the secret for the GCP service account json file   | `<nil>`                              |
+| `env.existingSecretMappings.CACHE_REDIS_PASSWORD`    | Key name in the secret for the Redis requirepass configuration | `<nil>`                              |
+| `env.secret.BASIC_AUTH_USER`            | Username for basic HTTP authentication                                      | `<nil>`                              |
+| `env.secret.BASIC_AUTH_PASS`            | Password for basic HTTP authentication                                      | `<nil>`                              |
+| `env.secret.GOOGLE_CREDENTIALS_JSON`    | GCP service account json file                                               | `<nil>`                              |
+| `env.secret.CACHE_REDIS_PASSWORD`       | Redis requirepass server configuration                                      | `<nil>`                              |
+| `extraArgs`                             | Pass extra arguments to the chartmuseum binary                              | `[]`                                 |
+| `probes.liveness.initialDelaySeconds`   | Delay before liveness probe is initiated                                    | `5`                                  |
+| `probes.liveness.periodSeconds`         | How often (in seconds) to perform the liveness probe                        | `10`                                 |
+| `probes.liveness.timeoutSeconds`        | Number of seconds after which the liveness probe times out                  | `1`                                  |
+| `probes.liveness.successThreshold`      | Minimum consecutive successes for the liveness probe                        | `1`                                  |
+| `probes.liveness.failureThreshold`      | Minimum consecutive failures for the liveness probe                         | `3`                                  |
+| `probes.readiness.initialDelaySeconds`  | Delay before readiness probe is initiated                                   | `5`                                  |
+| `probes.readiness.periodSeconds`        | How often (in seconds) to perform the readiness probe                       | `10`                                 |
+| `probes.readiness.timeoutSeconds`       | Number of seconds after which the readiness probe times out                 | `1`                                  |
+| `probes.readiness.successThreshold`     | Minimum consecutive successes for the readiness probe                       | `1`                                  |
+| `probes.readiness.failureThreshold`     | Minimum consecutive failures for the readiness probe                        | `3`                                  |
 | `gcp.secret.enabled`                    | Flag for the GCP service account                                            | `false`                              |
-| `gcp.secret.name`                       | Secret name for the GCP json file                                           | ``                                   |
+| `gcp.secret.name`                       | Secret name for the GCP json file                                           | `<nil>`                              |
 | `gcp.secret.key`                        | Secret key for te GCP json file                                             | `credentials.json`                   |
 | `oracle.secret.enabled`                 | Flag for Oracle OCI account                                                 | `false`                              |
-| `oracle.secret.name`                    | Secret name for OCI config and key                                          | ``                                   |
+| `oracle.secret.name`                    | Secret name for OCI config and key                                          | `<nil>`                              |
 | `oracle.secret.config`                  | Secret key that holds the OCI config                                        | `config`                             |
 | `oracle.secret.key_file`                | Secret key that holds the OCI private key                                   | `key_file`                           |
-| `bearerAuth.secret.enabled`             | Flag for bearer auth public key secret                                      | ``                                   |
-| `bearerAuth.secret.publicKey`           | The name of the secret with the public key                                  | ``                                   |
+| `bearerAuth.secret.enabled`             | Flag for bearer auth public key secret                                      | `false`                              |
+| `bearerAuth.secret.publicKeySecret`     | The name of the secret with the public key                                  | `chartmuseum-public-key`             |
 | `service.type`                          | Kubernetes Service type                                                     | `ClusterIP`                          |
-| `service.clusterIP`                     | Static clusterIP or None for headless services                              | `nil`                                |
+| `service.clusterIP`                     | Static clusterIP or None for headless services                              | `<nil>`                              |
 | `service.externalTrafficPolicy`         | Source IP preservation (only for Service type NodePort and LoadBalancer)    | `Local`                              |
 | `service.loadBalancerSourceRanges`      | Restricts access for LoadBalancer (only for Service type LoadBalancer)      | `[]`                                 |
-| `service.servicename`                   | Custom name for service                                                     | ``                                   |
+| `service.servicename`                   | Custom name for service                                                     | `<nil>`                              |
 | `service.labels`                        | Additional labels for service                                               | `{}`                                 |
 | `serviceMonitor.enabled`                | Enable the ServiceMontor resource to be deployed                            | `false`                              |
 | `serviceMonitor.labels`                 | Labels for the servicemonitor used by the Prometheus Operator               | `{}`                                 |
 | `serviceMonitor.namespace`              | Namespace of the ServiceMonitor resource                                    | `{{ .Release.Namespace }}`           |
 | `serviceMonitor.metricsPath`            | Path to the Chartmuseum metrics path                                        | `/metrics`                           |
-| `serviceMonitor.interval`               | Scrape interval, If not set, the Prometheus default scrape interval is used | `nil`                                |
-| `serviceMonitor.timeout`                | Scrape request timeout. If not set, the Prometheus default timeout is used  | `nil`                                |
+| `serviceMonitor.interval`               | Scrape interval, If not set, the Prometheus default scrape interval is used | `<nil>`                              |
+| `serviceMonitor.timeout`                | Scrape request timeout. If not set, the Prometheus default timeout is used  | `<nil>`                              |
+| `deployment.annotations`                | Additional annotations for deployment                                       | `{}`                                 |
 | `deployment.labels`                     | Additional labels for deployment                                            | `{}`                                 |
-| `deployment.matchlabes`                 | Match labels for deployment selector                                        | `{}`                                 |
+| `podAnnotations`                        | Annotations for pods                                                        | `{}`                                 |
 | `ingress.enabled`                       | Enable ingress controller resource                                          | `false`                              |
-| `ingress.annotations`                   | Ingress annotations                                                         | `[]`                                 |
-| `ingress.labels`                        | Ingress labels                                                              | `[]`                                 |
-| `ingress.hosts[0].name`                 | Hostname for the ingress                                                    | ``                                   |
-| `ingress.hosts[0].path`                 | Path within the url structure                                               | ``                                   |
+| `ingress.annotations`                   | Ingress annotations                                                         | `{}`                                 |
+| `ingress.labels`                        | Ingress labels                                                              | `{}`                                 |
+| `ingress.hosts[0].name`                 | Hostname for the ingress                                                    | `<nil>`                              |
+| `ingress.hosts[0].path`                 | Path within the url structure                                               | `/`                                  |
 | `ingress.hosts[0].tls `                 | Enable TLS on the ingress host                                              | `false`                              |
-| `ingress.hosts[0].tlsSecret`            | TLS secret to use (must be manually created)                                | ``                                   |
-| `ingress.hosts[0].serviceName`          | The name of the service to route traffic to.                                | `{{ .Values.service.externalPort }}` |
-| `ingress.hosts[0].servicePort`          | The port of the service to route traffic to.                                | `{{ .chartmuseum. }}`                |
-| `ingress.extraPaths[0].path`            | Path within the url structure.                                              | ``                                   |
-| `ingress.extraPaths[0].service`         | The name of the service to route traffic to.                                | ``                                   |
-| `ingress.extraPaths[0].port`            | The port of the service to route traffic to.                                | ``                                   |
+| `ingress.hosts[0].tlsSecret`            | TLS secret to use (must be manually created)                                | `<nil>`                              |
+| `ingress.hosts[0].serviceName`          | The name of the service to route traffic to.                                | `{{ include "chartmuseum.fullname" . }}` |
+| `ingress.hosts[0].servicePort`          | The port of the service to route traffic to.                                | `{{ .Values.service.externalPort }}` |
+| `ingress.extraPaths[0].path`            | Path within the url structure.                                              | `<nil>`                              |
+| `ingress.extraPaths[0].service`         | The name of the service to route traffic to.                                | `<nil>`                              |
+| `ingress.extraPaths[0].port`            | The port of the service to route traffic to.                                | `<nil>`                              |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to
 `helm install`.
@@ -295,9 +309,8 @@ env:
     STORAGE_AMAZON_BUCKET: my-s3-bucket
     STORAGE_AMAZON_PREFIX:
     STORAGE_AMAZON_REGION: us-east-1
-replica:
-  annotations:
-    iam.amazonaws.com/role: "{assumed role name}"
+podAnnotations:
+  iam.amazonaws.com/role: "{assumed role name}"
 ```
 
 Run command to install
@@ -712,7 +725,7 @@ helm install --name my-chartmuseum stable/chartmuseum \
 
 #### Annotations
 
-For annotations, please see [this document for nginx](https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md) and [this document for Traefik](https://docs.traefik.io/configuration/backends/kubernetes/#general-annotations). Not all annotations are supported by all ingress controllers, but this document does a good job of indicating which annotation is supported by many popular ingress controllers. Annotations can be set using `ingress.annotations`.
+For annotations, please see [this document for nginx](https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md) and [this document for Traefik](https://doc.traefik.io/traefik/v1.7/configuration/backends/kubernetes/#general-annotations). Not all annotations are supported by all ingress controllers, but this document does a good job of indicating which annotation is supported by many popular ingress controllers. Annotations can be set using `ingress.annotations`.
 
 #### Example Ingress configuration
 
@@ -738,3 +751,16 @@ To delete the deployment and its history:
 ```shell
 helm delete --purge my-chartmuseum
 ```
+
+## Upgrading
+
+### To 3.0.0
+
+* This is a breaking change which only supports Helm v3.0.0+ now. If you still use helm v2, please consider upgrading because v2 is EOL for quite a while.  
+  * To migrate to helm v3 please have a look at the [Helm 2to3 Plugin](https://github.com/helm/helm-2to3). This tool will convert the existing ConfigMap used for Tiller to a Secret of type `helm.sh/release.v1`.
+  * When you are using object storage for persistence (instead of a PVC), you can simply uninstall your helm v2 release and perform a fresh installation with helm v3 without using the `2to3` plugin.
+* We now follow the official Kubernetes [label recommendations](https://kubernetes.io/docs/concepts/overview/working-with-objects/common-labels/).  
+  To upgrade an existing installation, please **add the `--force` parameter** to the `helm upgrade` command or **delete the Deployment resource** before you upgrade. This is necessary becase Deployment's label selector is immutable.
+* Renamed parameters
+  * `deployment.schedulerName` was renamed to `schedulerName`
+  * `replica.annotations` was renamed to `podAnnotations`
