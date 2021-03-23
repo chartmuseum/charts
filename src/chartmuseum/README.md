@@ -269,7 +269,7 @@ You can grant it to `chartmuseum` by several ways:
 
 Grant permissions to `special user` and us it's access keys for auth on aws
 
-Specify `custom.yaml` with such values/
+Specify `custom.yaml` with such values
 
 ```yaml
 env:
