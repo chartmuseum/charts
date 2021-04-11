@@ -760,7 +760,7 @@ helm delete --purge my-chartmuseum
   * To migrate to helm v3 please have a look at the [Helm 2to3 Plugin](https://github.com/helm/helm-2to3). This tool will convert the existing ConfigMap used for Tiller to a Secret of type `helm.sh/release.v1`.
   * When you are using object storage for persistence (instead of a PVC), you can simply uninstall your helm v2 release and perform a fresh installation with helm v3 without using the `2to3` plugin.
 * We now follow the official Kubernetes [label recommendations](https://kubernetes.io/docs/concepts/overview/working-with-objects/common-labels/).  
-  To upgrade an existing installation, please **add the `--force` parameter** to the `helm upgrade` command or **delete the Deployment resource** before you upgrade. This is necessary becase Deployment's label selector is immutable.
+  To upgrade an existing installation, please **add the `--force` parameter** to the `helm upgrade` command or **delete the Deployment resource** before you upgrade. This is necessary because Deployment's label selector is immutable.
 * Renamed parameters
   * `deployment.schedulerName` was renamed to `schedulerName`
   * `replica.annotations` was renamed to `podAnnotations`
