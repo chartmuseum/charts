@@ -183,6 +183,7 @@ their default values. See values.yaml for all available options.
 | `service.type`                          | Kubernetes Service type                                                     | `ClusterIP`                          |
 | `service.clusterIP`                     | Static clusterIP or None for headless services                              | `<nil>`                              |
 | `service.externalTrafficPolicy`         | Source IP preservation (only for Service type NodePort and LoadBalancer)    | `Local`                              |
+| `service.loadBalancerIP`                | Uses IP address created by a cloud provider                                 | `<nil>`                              |
 | `service.loadBalancerSourceRanges`      | Restricts access for LoadBalancer (only for Service type LoadBalancer)      | `[]`                                 |
 | `service.servicename`                   | Custom name for service                                                     | `<nil>`                              |
 | `service.labels`                        | Additional labels for service                                               | `{}`                                 |

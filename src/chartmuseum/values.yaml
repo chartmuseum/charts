@@ -141,6 +141,9 @@ service:
   servicename:
   type: ClusterIP
   externalTrafficPolicy: Local
+  ## Uses pre-assigned IP address from cloud provider
+  ## Only valid if service.type: LoadBalancer
+  loadBalancerIP:
   ## Limits which cidr blocks can connect to service's load balancer
   ## Only valid if service.type: LoadBalancer
   loadBalancerSourceRanges: []
