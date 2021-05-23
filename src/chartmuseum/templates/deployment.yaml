@@ -120,11 +120,17 @@ spec:
           httpGet:
             path: {{ .Values.env.open.CONTEXT_PATH }}/health
             port: http
+            {{- if and .Values.env.open.TLS_CERT .Values.env.open.TLS_KEY }}
+            scheme: HTTPS
+            {{- end }}
 {{ toYaml .Values.probes.liveness | indent 10 }}
         readinessProbe:
           httpGet:
             path: {{ .Values.env.open.CONTEXT_PATH }}/health
             port: http
+            {{- if and .Values.env.open.TLS_CERT .Values.env.open.TLS_KEY }}
+            scheme: HTTPS
+            {{- end }}
 {{ toYaml .Values.probes.readiness | indent 10 }}
         volumeMounts:
 {{- if eq .Values.env.open.STORAGE "local" }}
