@@ -1,5 +1,16 @@
 extraArgs: []
   # - --storage-timestamp-tolerance 1s
+extraVolumeMounts: []
+  # - name: secrets-store-inline
+  #   mountPath: "/mnt/chartmuseum-secrets"
+  #   readOnly: true
+extraVolumes: []
+  # - name: secrets-store-inline
+  #   csi:
+  #       driver: secrets-store.csi.k8s.io
+  #       readOnly: true
+  #       volumeAttributes:
+  #         secretProviderClass: "chartmuseum-secrets"
 replicaCount: 1
 strategy:
   type: RollingUpdate

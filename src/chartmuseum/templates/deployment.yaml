@@ -144,6 +144,9 @@ spec:
           mountPath: /var/keys
           readOnly: true
 {{- end }}
+{{- if .Values.extraVolumeMounts }}
+{{ toYaml .Values.extraVolumeMounts | indent 8 }}
+{{- end }}
       {{- with .Values.resources }}
         resources:
 {{ toYaml . | indent 10 }}
@@ -202,4 +205,7 @@ spec:
       - name: public-key
         secret:
           secretName: {{ .Values.bearerAuth.secret.publicKeySecret }}
+{{- end }}
+{{- if .Values.extraVolumes }}
+{{ toYaml .Values.extraVolumes | indent 6 }}
 {{- end }}

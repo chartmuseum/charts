@@ -161,6 +161,8 @@ their default values. See values.yaml for all available options.
 | `env.secret.GOOGLE_CREDENTIALS_JSON`    | GCP service account json file                                               | `<nil>`                              |
 | `env.secret.CACHE_REDIS_PASSWORD`       | Redis requirepass server configuration                                      | `<nil>`                              |
 | `extraArgs`                             | Pass extra arguments to the chartmuseum binary                              | `[]`                                 |
+| `extraVolumeMounts`                     | Pass extra volumeMounts to the chartmuseum container                        | `[]`                                 |
+| `extraVolumes`                          | Pass extra volumes to the chartmuseum deployment                            | `[]`                                 |
 | `probes.liveness.initialDelaySeconds`   | Delay before liveness probe is initiated                                    | `5`                                  |
 | `probes.liveness.periodSeconds`         | How often (in seconds) to perform the liveness probe                        | `10`                                 |
 | `probes.liveness.timeoutSeconds`        | Number of seconds after which the liveness probe times out                  | `1`                                  |
