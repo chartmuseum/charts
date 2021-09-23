@@ -199,6 +199,7 @@ their default values. See values.yaml for all available options.
 | `ingress.enabled`                       | Enable ingress controller resource                                          | `false`                              |
 | `ingress.annotations`                   | Ingress annotations                                                         | `{}`                                 |
 | `ingress.labels`                        | Ingress labels                                                              | `{}`                                 |
+| `ingress.ingressClassName`              | Ingress class name for Kubernetes 1.18 and above                            | `<nil>`                              |
 | `ingress.hosts[0].name`                 | Hostname for the ingress                                                    | `<nil>`                              |
 | `ingress.hosts[0].path`                 | Path within the url structure                                               | `/`                                  |
 | `ingress.hosts[0].tls `                 | Enable TLS on the ingress host                                              | `false`                              |
