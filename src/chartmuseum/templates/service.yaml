@@ -4,7 +4,7 @@ metadata:
   name: {{ .Values.service.servicename | default (include "chartmuseum.fullname" .) }}
   {{- with .Values.service.annotations }}
   annotations:
-    {{ toYaml . | indent 4 }}
+  {{- toYaml . | nindent 4 }}
   {{- end }}
   labels:
     {{- include "chartmuseum.labels" . | nindent 4 }}
