@@ -195,6 +195,8 @@ their default values. See values.yaml for all available options.
 | `serviceMonitor.timeout`                | Scrape request timeout. If not set, the Prometheus default timeout is used  | `<nil>`                              |
 | `deployment.annotations`                | Additional annotations for deployment                                       | `{}`                                 |
 | `deployment.labels`                     | Additional labels for deployment                                            | `{}`                                 |
+| `deployment.extraVolumes`               | Additional volumes for deployment                                           | `[]`                                 |
+| `deployment.extraVolumeMounts`          | Additional volumes to mount in container for deployment                     | `[]`                                 |
 | `podAnnotations`                        | Annotations for pods                                                        | `{}`                                 |
 | `ingress.enabled`                       | Enable ingress controller resource                                          | `false`                              |
 | `ingress.annotations`                   | Ingress annotations                                                         | `{}`                                 |
