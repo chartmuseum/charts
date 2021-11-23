@@ -129,6 +129,10 @@ deployment:
   #   name: value
   labels: {}
   #   name: value
+  # additional volumes
+  extraVolumes: []
+  # additional volumes to mount
+  extraVolumeMounts: []
 
 ## Pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/

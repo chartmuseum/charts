@@ -127,6 +127,9 @@ spec:
             port: http
 {{ toYaml .Values.probes.readiness | indent 10 }}
         volumeMounts:
+{{- if .Values.deployment.extraVolumeMounts }}
+        {{- toYaml .Values.deployment.extraVolumeMounts | nindent 8 }}
+{{- end }}
 {{- if eq .Values.env.open.STORAGE "local" }}
         - mountPath: {{ .Values.persistence.path }}
           name: storage-volume
@@ -166,6 +169,9 @@ spec:
       serviceAccountName: {{ include "chartmuseum.serviceAccountName" . }}
       automountServiceAccountToken: {{ .Values.serviceAccount.automountServiceAccountToken }}
       volumes:
+      {{- if .Values.deployment.extraVolumes }}
+      {{- toYaml .Values.deployment.extraVolumes | nindent 6 }}
+      {{- end }}
       - name: storage-volume
       {{- if .Values.persistence.enabled }}
         persistentVolumeClaim:
