@@ -16,3 +16,4 @@ helm install my-chartmuseum chartmuseum/chartmuseum --version 2.15.0
 ```
 helm install --name my-chartmuseum chartmuseum/chartmuseum --version 2.15.0
 ```
+

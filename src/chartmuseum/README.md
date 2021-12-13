@@ -183,6 +183,7 @@ their default values. See values.yaml for all available options.
 | `service.type`                          | Kubernetes Service type                                                     | `ClusterIP`                          |
 | `service.clusterIP`                     | Static clusterIP or None for headless services                              | `<nil>`                              |
 | `service.externalTrafficPolicy`         | Source IP preservation (only for Service type NodePort and LoadBalancer)    | `Local`                              |
+| `service.loadBalancerIP`                | Uses IP address created by a cloud provider                                 | `<nil>`                              |
 | `service.loadBalancerSourceRanges`      | Restricts access for LoadBalancer (only for Service type LoadBalancer)      | `[]`                                 |
 | `service.servicename`                   | Custom name for service                                                     | `<nil>`                              |
 | `service.labels`                        | Additional labels for service                                               | `{}`                                 |
@@ -194,10 +195,13 @@ their default values. See values.yaml for all available options.
 | `serviceMonitor.timeout`                | Scrape request timeout. If not set, the Prometheus default timeout is used  | `<nil>`                              |
 | `deployment.annotations`                | Additional annotations for deployment                                       | `{}`                                 |
 | `deployment.labels`                     | Additional labels for deployment                                            | `{}`                                 |
+| `deployment.extraVolumes`               | Additional volumes for deployment                                           | `[]`                                 |
+| `deployment.extraVolumeMounts`          | Additional volumes to mount in container for deployment                     | `[]`                                 |
 | `podAnnotations`                        | Annotations for pods                                                        | `{}`                                 |
 | `ingress.enabled`                       | Enable ingress controller resource                                          | `false`                              |
 | `ingress.annotations`                   | Ingress annotations                                                         | `{}`                                 |
 | `ingress.labels`                        | Ingress labels                                                              | `{}`                                 |
+| `ingress.ingressClassName`              | Ingress class name for Kubernetes 1.18 and above                            | `<nil>`                              |
 | `ingress.hosts[0].name`                 | Hostname for the ingress                                                    | `<nil>`                              |
 | `ingress.hosts[0].path`                 | Path within the url structure                                               | `/`                                  |
 | `ingress.hosts[0].tls `                 | Enable TLS on the ingress host                                              | `false`                              |

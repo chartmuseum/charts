@@ -129,6 +129,10 @@ deployment:
   #   name: value
   labels: {}
   #   name: value
+  # additional volumes
+  extraVolumes: []
+  # additional volumes to mount
+  extraVolumeMounts: []
 
 ## Pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
@@ -141,6 +145,9 @@ service:
   servicename:
   type: ClusterIP
   externalTrafficPolicy: Local
+  ## Uses pre-assigned IP address from cloud provider
+  ## Only valid if service.type: LoadBalancer
+  loadBalancerIP:
   ## Limits which cidr blocks can connect to service's load balancer
   ## Only valid if service.type: LoadBalancer
   loadBalancerSourceRanges: []
@@ -286,6 +293,10 @@ ingress:
     #   ## If TLS is set to true, you must declare what secret will store the key/certificate for TLS
     #   ## Secrets must be added manually to the namespace
     #   tlsSecret: chartmuseum.domain2-tls
+
+  # For Kubernetes >= 1.18 you should specify the ingress-controller via the field ingressClassName
+  # See https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/#specifying-the-class-of-an-ingress
+  ingressClassName:
 
 # Adding secrets to tiller is not a great option, so If you want to use an existing
 # secret that contains the json file, you can use the following entries
