@@ -166,11 +166,13 @@ their default values. See values.yaml for all available options.
 | `probes.liveness.timeoutSeconds`        | Number of seconds after which the liveness probe times out                  | `1`                                  |
 | `probes.liveness.successThreshold`      | Minimum consecutive successes for the liveness probe                        | `1`                                  |
 | `probes.liveness.failureThreshold`      | Minimum consecutive failures for the liveness probe                         | `3`                                  |
+| `probes.livenessHttpGetConfig.scheme`   | Scheme to use for the liveness probe                                        | `HTTP`                               |
 | `probes.readiness.initialDelaySeconds`  | Delay before readiness probe is initiated                                   | `5`                                  |
 | `probes.readiness.periodSeconds`        | How often (in seconds) to perform the readiness probe                       | `10`                                 |
 | `probes.readiness.timeoutSeconds`       | Number of seconds after which the readiness probe times out                 | `1`                                  |
 | `probes.readiness.successThreshold`     | Minimum consecutive successes for the readiness probe                       | `1`                                  |
 | `probes.readiness.failureThreshold`     | Minimum consecutive failures for the readiness probe                        | `3`                                  |
+| `probes.readinessHttpGetConfig.scheme`  | Scheme to use for the readiness probe                                       | `HTTP`                               |
 | `gcp.secret.enabled`                    | Flag for the GCP service account                                            | `false`                              |
 | `gcp.secret.name`                       | Secret name for the GCP json file                                           | `<nil>`                              |
 | `gcp.secret.key`                        | Secret key for te GCP json file                                             | `credentials.json`                   |
