@@ -76,7 +76,7 @@ their default values. See values.yaml for all available options.
 | --------------------------------------- | --------------------------------------------------------------------------- | ------------------------------------ |
 | `image.pullPolicy`                      | Container pull policy                                                       | `IfNotPresent`                       |
 | `image.repository`                      | Container image to use                                                      | `ghcr.io/helm/chartmuseum`           |
-| `image.tag`                             | Container image tag to deploy                                               | `v0.13.0`                            |
+| `image.tag`                             | Container image tag to deploy                                               | `v0.13.1`                            |
 | `persistence.accessMode`                | Access mode to use for PVC                                                  | `ReadWriteOnce`                      |
 | `persistence.enabled`                   | Whether to use a PVC for persistent storage                                 | `false`                              |
 | `persistence.path`                      | PV mount path                                                               | `/storage`                           |
@@ -217,8 +217,24 @@ Specify each parameter using the `--set key=value[,key=value]` argument to
 
 ## Installation
 
+### Add repository
+```
+helm repo add chartmuseum https://chartmuseum.github.io/charts
+```
+
+### Install chart (Helm v3)
+```
+helm install my-chartmuseum chartmuseum/chartmuseum --version 3.1.0
+```
+
+### Install chart (Helm v2)
+```
+helm install --name my-chartmuseum chartmuseum/chartmuseum --version 2.15.0
+```
+
+### Installation using custom config
 ```shell
-helm install --name my-chartmuseum -f custom.yaml stable/chartmuseum
+helm install --name my-chartmuseum chartmuseum/chartmuseum  -f custom.yaml 
 ```
 
 ### Using with Amazon S3
@@ -274,7 +290,7 @@ env:
 Run command to install
 
 ```shell
-helm install --name my-chartmuseum -f custom.yaml stable/chartmuseum
+helm install --name my-chartmuseum -f custom.yaml chartmuseum/chartmuseum
 ```
 
 #### permissions grant with IAM instance profile
@@ -296,7 +312,7 @@ env:
 Run command to install
 
 ```shell
-helm install --name my-chartmuseum -f custom.yaml stable/chartmuseum
+helm install --name my-chartmuseum -f custom.yaml chartmuseum/chartmuseum
 ```
 
 #### permissions grant with IAM assumed role
@@ -320,7 +336,7 @@ podAnnotations:
 Run command to install
 
 ```shell
-helm install --name my-chartmuseum -f custom.yaml stable/chartmuseum
+helm install --name my-chartmuseum -f custom.yaml chartmuseum/chartmuseum
 ```
 
 #### permissions grant with IAM Roles for Service Accounts
@@ -345,7 +361,7 @@ serviceAccount:
 Run command to install
 
 ```shell
-helm install --name my-chartmuseum -f custom.yaml stable/chartmuseum
+helm install --name my-chartmuseum -f custom.yaml chartmuseum/chartmuseum
 ```
 
 ### Using with Google Cloud Storage
@@ -372,7 +388,7 @@ kubectl create secret generic chartmuseum-secret --from-file=credentials.json="m
 Then you can either use a `VALUES` yaml with your values or set those values in the command line:
 
 ```shell
-helm install stable/chartmuseum --debug  --set gcp.secret.enabled=true,env.open.STORAGE=google,env.open.DISABLE_API=false,env.open.STORAGE_GOOGLE_BUCKET=my-gcp-chartmuseum,gcp.secret.name=chartmuseum-secret
+helm install chartmuseum/chartmuseum --debug  --set gcp.secret.enabled=true,env.open.STORAGE=google,env.open.DISABLE_API=false,env.open.STORAGE_GOOGLE_BUCKET=my-gcp-chartmuseum,gcp.secret.name=chartmuseum-secret
 ```
 
 If you prefer to use a yaml file:
@@ -394,7 +410,7 @@ gcp:
 Run command to install
 
 ```shell
-helm install --name my-chartmuseum -f custom.yaml stable/chartmuseum
+helm install --name my-chartmuseum -f custom.yaml chartmuseum/chartmuseum
 ```
 
 In case that you don't mind adding your secret to tiller (you shouldn't do it), this are the commands
@@ -416,14 +432,14 @@ gcp:
 Run command to install
 
 ```shell
-helm install --name my-chartmuseum -f custom.yaml stable/chartmuseum
+helm install --name my-chartmuseum -f custom.yaml chartmuseum/chartmuseum
 ```
 
 To set the values directly in the command line, use the following command. Note that we have to base64 encode the json file because we cannot pass a multi-line text as a value.
 
 ```shell
 export JSONKEY=$(cat my-project-77e35d85a593.json | base64)
-helm install stable/chartmuseum --debug  --set gcp.secret.enabled=true,env.secret.GOOGLE_CREDENTIALS_JSON=${JSONKEY},env.open.STORAGE=google,env.open.DISABLE_API=false,env.open.STORAGE_GOOGLE_BUCKET=my-gcp-chartmuseum
+helm install chartmuseum/chartmuseum --debug  --set gcp.secret.enabled=true,env.secret.GOOGLE_CREDENTIALS_JSON=${JSONKEY},env.open.STORAGE=google,env.open.DISABLE_API=false,env.open.STORAGE_GOOGLE_BUCKET=my-gcp-chartmuseum
 ```
 
 ### Using with Microsoft Azure Blob Storage
@@ -451,7 +467,7 @@ env:
 Run command to install
 
 ```shell
-helm install --name my-chartmuseum -f custom.yaml stable/chartmuseum
+helm install --name my-chartmuseum -f custom.yaml chartmuseum/chartmuseum
 ```
 
 ### Using with Alibaba Cloud OSS Storage
@@ -479,7 +495,7 @@ env:
 Run command to install
 
 ```shell
-helm install --name my-chartmuseum -f custom.yaml stable/chartmuseum
+helm install --name my-chartmuseum -f custom.yaml chartmuseum/chartmuseum
 ```
 
 ### Using with Openstack Object Storage
@@ -512,7 +528,7 @@ env:
 Run command to install
 
 ```shell
-helm install --name my-chartmuseum -f custom.yaml stable/chartmuseum
+helm install --name my-chartmuseum -f custom.yaml chartmuseum/chartmuseum
 ```
 ### Using with Oracle Object Storage
 
@@ -525,7 +541,7 @@ kubectl create secret generic chartmuseum-secret --from-file=config=".oci/config
 Then you can either use a `VALUES` yaml with your values or set those values in the command line:
 
 ```shell
-helm install stable/chartmuseum --debug  --set env.open.STORAGE=oracle,env.open.STORAGE_ORACLE_COMPARTMENTID=ocid1.compartment.oc1..abc123,env.open.STORAGE_ORACLE_BUCKET=myocibucket,env.open.STORAGE_ORACLE_PREFIX=chartmuseum,oracle.secret.enabled=true,oracle.secret.name=chartmuseum-secret
+helm install chartmuseum/chartmuseum --debug  --set env.open.STORAGE=oracle,env.open.STORAGE_ORACLE_COMPARTMENTID=ocid1.compartment.oc1..abc123,env.open.STORAGE_ORACLE_BUCKET=myocibucket,env.open.STORAGE_ORACLE_PREFIX=chartmuseum,oracle.secret.enabled=true,oracle.secret.name=chartmuseum-secret
 ```
 
 If you prefer to use a yaml file:
@@ -550,7 +566,7 @@ oracle:
 Run command to install
 
 ```shell
-helm install --name my-chartmuseum -f custom.yaml stable/chartmuseum
+helm install --name my-chartmuseum -f custom.yaml chartmuseum/chartmuseum
 ```
 
 ### Using an existing secret
@@ -585,7 +601,7 @@ env:
 Run command to install
 
 ```shell
-helm install --name my-chartmuseum -f custom.yaml stable/chartmuseum
+helm install --name my-chartmuseum -f custom.yaml chartmuseum/chartmuseum
 ```
 
 ### Using with local filesystem storage
@@ -618,7 +634,7 @@ persistence:
 Run command to install
 
 ```shell
-helm install --name my-chartmuseum -f custom.yaml stable/chartmuseum
+helm install --name my-chartmuseum -f custom.yaml chartmuseum/chartmuseum
 ```
 
 ### Setting local storage permissions with initContainers
@@ -719,7 +735,7 @@ In most cases, you should not specify values for `ingress.hosts[0].serviceName` 
 Specifying extra paths to prepend to every host configuration is especially useful when configuring [custom actions with AWS ALB Ingress Controller](https://kubernetes-sigs.github.io/aws-alb-ingress-controller/guide/ingress/annotation/#actions).
 
 ```shell
-helm install --name my-chartmuseum stable/chartmuseum \
+helm install --name my-chartmuseum chartmuseum/chartmuseum \
   --set ingress.enabled=true \
   --set ingress.hosts[0].name=chartmuseum.domain.com \
   --set ingress.extraPaths[0].service=ssl-redirect \
@@ -734,7 +750,7 @@ For annotations, please see [this document for nginx](https://github.com/kuberne
 #### Example Ingress configuration
 
 ```shell
-helm install --name my-chartmuseum stable/chartmuseum \
+helm install --name my-chartmuseum chartmuseum/chartmuseum \
   --set ingress.enabled=true \
   --set ingress.hosts[0].name=chartmuseum.domain.com \
   --set ingress.hosts[0].path=/
