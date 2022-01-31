@@ -7,7 +7,7 @@ strategy:
     maxUnavailable: 0
 image:
   repository: ghcr.io/helm/chartmuseum
-  tag: v0.13.1
+  tag: v0.14.0
   pullPolicy: IfNotPresent
 secret:
   labels: {}
