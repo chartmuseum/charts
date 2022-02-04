@@ -350,6 +350,7 @@ Specify `custom.yaml` with such values
 ```yaml
 env:
   open:
+    AWS_SDK_LOAD_CONFIG: true
     STORAGE: amazon
     STORAGE_AMAZON_BUCKET: my-s3-bucket
     STORAGE_AMAZON_PREFIX:
