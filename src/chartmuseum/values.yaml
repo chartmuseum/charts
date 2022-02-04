@@ -7,7 +7,7 @@ strategy:
     maxUnavailable: 0
 image:
   repository: ghcr.io/helm/chartmuseum
-  tag: v0.13.1
+  tag: v0.14.0
   pullPolicy: IfNotPresent
 secret:
   labels: {}
@@ -180,12 +180,16 @@ probes:
     timeoutSeconds: 1
     successThreshold: 1
     failureThreshold: 3
+  livenessHttpGetConfig:
+    scheme: HTTP
   readiness:
     initialDelaySeconds: 5
     periodSeconds: 10
     timeoutSeconds: 1
     successThreshold: 1
     failureThreshold: 3
+  readinessHttpGetConfig:
+    scheme: HTTP
 
 serviceAccount:
   create: false
