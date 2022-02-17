@@ -4,13 +4,13 @@ name: chartmuseum
 version: 3.6.2
 appVersion: 0.14.0
 home: https://github.com/helm/chartmuseum
-icon: https://raw.githubusercontent.com/chartmuseum/charts/main/logo.jpg
+icon: https://raw.githubusercontent.com/mike7515/charts/main/logo.jpg
 keywords:
   - chartmuseum
   - helm
   - charts repo
 sources:
-  - https://github.com/chartmuseum/charts/tree/main/src/chartmuseum
+  - https://github.com/mike7515/charts/tree/main/src/chartmuseum
   - https://github.com/chartmuseum
   - https://github.com/helm/chartmuseum
 maintainers:
