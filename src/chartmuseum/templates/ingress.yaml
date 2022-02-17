@@ -49,8 +49,12 @@ spec:
             name: {{ default $serviceName .service }}
             {{- end }}
             port:
+              {{- if kindIs "string" (default $servicePort .port) }}
+              name: {{ default $servicePort .port }}
+              {{- else }}
               number: {{ default $servicePort .port }}
-        pathType: ImplementationSpecific
+              {{- end }}
+        pathType: {{ default "ImplementationSpecific" .pathType | quote }}
         {{- end }}
       {{- end }}
       - path: {{ default "/" .path | quote }}
@@ -70,8 +74,12 @@ spec:
             name: {{ default $serviceName .service }}
             {{- end }}
             port:
+             {{- if kindIs "string" (default $servicePort .port) }}
+              name: {{ default $servicePort .port }}
+              {{- else }}
               number: {{ default $servicePort .port }}
-        pathType: ImplementationSpecific
+              {{- end }}
+        pathType: {{ default "ImplementationSpecific" .pathType | quote }}
         {{- end }}
   {{- end }}
   tls:
