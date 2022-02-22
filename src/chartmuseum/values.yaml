@@ -69,7 +69,7 @@ env:
     # disable use of index-cache.yaml
     DISABLE_STATEFILES: false
     # disable Prometheus metrics
-    DISABLE_METRICS: true
+    ENABLE_METRICS: false
     # disable all routes prefixed with /api
     DISABLE_API: true
     # allow chart versions to be re-uploaded
