@@ -68,7 +68,7 @@ env:
     LOG_JSON: true
     # disable use of index-cache.yaml
     DISABLE_STATEFILES: false
-    # disable Prometheus metrics
+    # enable Prometheus metrics
     ENABLE_METRICS: false
     # disable all routes prefixed with /api
     DISABLE_API: true
