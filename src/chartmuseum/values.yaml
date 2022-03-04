@@ -3,8 +3,6 @@ extraArgs: []
 replicaCount: 1
 strategy:
   type: RollingUpdate
-  rollingUpdate:
-    maxUnavailable: 0
 image:
   repository: ghcr.io/helm/chartmuseum
   tag: v0.14.0
