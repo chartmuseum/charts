@@ -54,8 +54,10 @@ Please also see https://github.com/helm/chartmuseum
 ## Configuration
 
 By default this chart will not have persistent storage, and the API service
-will be *DISABLED*.  This protects against unauthorized access to the API
+will be *DISABLED* (`env.open.DISABLE_API=true`).  This protects against unauthorized access to the API
 with default configuration values.
+
+> You must set `env.open.DISABLE_API=false` if you intend to use the ChartMuseum API.
 
 In addition, by default, pod `securityContext.fsGroup` is set to `1000`. This
 is the user/group that the ChartMuseum container runs as, and is used to
