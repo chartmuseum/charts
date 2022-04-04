@@ -50,7 +50,7 @@ spec:
             {{- end }}
             port:
               number: {{ default $servicePort .port }}
-        pathType: {{ $.Values.ingress.pathType| default "ImplementationSpecific"  }}
+        pathType: {{ default $.Values.ingress.pathType .pathType }}
         {{- end }}
       {{- end }}
       - path: {{ default "/" .path | quote }}
