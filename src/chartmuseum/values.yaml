@@ -270,7 +270,7 @@ volumePermissions:
 ## Ingress for load balancer
 ingress:
   enabled: false
-  pathType: ""
+  pathType: "ImplementationSpecific"
   ## Chartmuseum Ingress labels
   ##
   labels: {}
