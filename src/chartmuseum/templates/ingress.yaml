@@ -71,7 +71,7 @@ spec:
             {{- end }}
             port:
               number: {{ default $servicePort .port }}
-        pathType: {{ $.Values.ingress.pathType| default "ImplementationSpecific"  }}
+        pathType: {{ $.Values.ingress.pathType }}
         {{- end }}
   {{- end }}
   tls:
