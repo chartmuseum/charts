@@ -35,6 +35,7 @@ Please also see https://github.com/helm/chartmuseum
       - [Bearer/Token auth](#bearertoken-auth)
     - [Ingress](#ingress)
       - [Hosts](#hosts)
+      - [Path Types](#path-types)
       - [Extra Paths](#extra-paths)
       - [Annotations](#annotations)
       - [Example Ingress configuration](#example-ingress-configuration)
@@ -203,6 +204,7 @@ their default values. See values.yaml for all available options.
 | `deployment.extraVolumeMounts`          | Additional volumes to mount in container for deployment                     | `[]`                                 |
 | `podAnnotations`                        | Annotations for pods                                                        | `{}`                                 |
 | `ingress.enabled`                       | Enable ingress controller resource                                          | `false`                              |
+| `ingress.pathType`                      | Ingress pathType for Kubernetes 1.18 and above                              | `ImplementationSpecific`             |
 | `ingress.annotations`                   | Ingress annotations                                                         | `{}`                                 |
 | `ingress.labels`                        | Ingress labels                                                              | `{}`                                 |
 | `ingress.ingressClassName`              | Ingress class name for Kubernetes 1.18 and above                            | `<nil>`                              |
@@ -735,6 +737,17 @@ Most likely you will only want to have one hostname that maps to this Chartmuseu
 
 In most cases, you should not specify values for `ingress.hosts[0].serviceName` and `ingress.hosts[0].servicePort`. However, some ingress controllers support advanced scenarios requiring you to specify these values. For example, [setting up an SSL redirect using the AWS ALB Ingress Controller](https://kubernetes-sigs.github.io/aws-alb-ingress-controller/guide/tasks/ssl_redirect/).
 
+#### Path Types
+
+Each path in an Ingress is required to have a corresponding path type. Paths that do not include an explicit pathType will fail validation. For more about Ingress pathTypes please see [this documentation](https://kubernetes.io/docs/concepts/services-networking/ingress/#path-types).
+
+```shell
+helm install --name my-chartmuseum chartmuseum/chartmuseum \
+  --set ingress.enabled=true \
+  --set ingress.hosts[0].name=chartmuseum.domain.com \
+  --set ingress.pathType=ImplementationSpecific
+```
+
 #### Extra Paths
 
 Specifying extra paths to prepend to every host configuration is especially useful when configuring [custom actions with AWS ALB Ingress Controller](https://kubernetes-sigs.github.io/aws-alb-ingress-controller/guide/ingress/annotation/#actions).
@@ -758,8 +771,9 @@ For annotations, please see [this document for nginx](https://github.com/kuberne
 helm install --name my-chartmuseum chartmuseum/chartmuseum \
   --set ingress.enabled=true \
   --set ingress.hosts[0].name=chartmuseum.domain.com \
-  --set ingress.hosts[0].path=/
-  --set ingress.hosts[0].tls=true
+  --set ingress.pathType=ImplementationSpecific \
+  --set ingress.hosts[0].path=/ \
+  --set ingress.hosts[0].tls=true \
   --set ingress.hosts[0].tlsSecret=chartmuseum.tls-secret
 ```
 
