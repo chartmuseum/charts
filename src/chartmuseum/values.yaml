@@ -3,11 +3,9 @@ extraArgs: []
 replicaCount: 1
 strategy:
   type: RollingUpdate
-  rollingUpdate:
-    maxUnavailable: 0
 image:
   repository: ghcr.io/helm/chartmuseum
-  tag: v0.13.1
+  tag: v0.14.0
   pullPolicy: IfNotPresent
 secret:
   labels: {}
@@ -129,6 +127,10 @@ deployment:
   #   name: value
   labels: {}
   #   name: value
+  # additional volumes
+  extraVolumes: []
+  # additional volumes to mount
+  extraVolumeMounts: []
 
 ## Pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
@@ -181,12 +183,16 @@ probes:
     timeoutSeconds: 1
     successThreshold: 1
     failureThreshold: 3
+  livenessHttpGetConfig:
+    scheme: HTTP
   readiness:
     initialDelaySeconds: 5
     periodSeconds: 10
     timeoutSeconds: 1
     successThreshold: 1
     failureThreshold: 3
+  readinessHttpGetConfig:
+    scheme: HTTP
 
 serviceAccount:
   create: false
@@ -267,6 +273,7 @@ volumePermissions:
 ## Ingress for load balancer
 ingress:
   enabled: false
+  pathType: "ImplementationSpecific"
   ## Chartmuseum Ingress labels
   ##
   labels: {}
