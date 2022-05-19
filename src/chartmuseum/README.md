@@ -203,6 +203,7 @@ their default values. See values.yaml for all available options.
 | `deployment.extraVolumes`               | Additional volumes for deployment                                           | `[]`                                 |
 | `deployment.extraVolumeMounts`          | Additional volumes to mount in container for deployment                     | `[]`                                 |
 | `podAnnotations`                        | Annotations for pods                                                        | `{}`                                 |
+| `podLabels`                             | Labels for pods                                                             | `{}`                                 |
 | `ingress.enabled`                       | Enable ingress controller resource                                          | `false`                              |
 | `ingress.pathType`                      | Ingress pathType for Kubernetes 1.18 and above                              | `ImplementationSpecific`             |
 | `ingress.annotations`                   | Ingress annotations                                                         | `{}`                                 |
