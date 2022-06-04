@@ -140,7 +140,7 @@ their default values. See values.yaml for all available options.
 | `env.open.DEBUG`                        | Show debug messages                                                         | `false`                              |
 | `env.open.LOG_JSON`                     | Output structured logs in JSON                                              | `true`                               |
 | `env.open.DISABLE_STATEFILES`           | Disable use of index-cache.yaml                                             | `false`                              |
-| `env.open.DISABLE_METRICS`              | Disable Prometheus metrics                                                  | `true`                               |
+| `env.open.ENABLE_METRICS`               | Enable Prometheus metrics                                                   | `false`                              |
 | `env.open.DISABLE_API`                  | Disable all routes prefixed with /api                                       | `true`                               |
 | `env.open.ALLOW_OVERWRITE`              | Allow chart versions to be re-uploaded                                      | `false`                              |
 | `env.open.CHART_URL`                    | Absolute url for .tgzs in index.yaml                                        | `<nil>`                              |

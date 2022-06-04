@@ -5,7 +5,7 @@ strategy:
   type: RollingUpdate
 image:
   repository: ghcr.io/helm/chartmuseum
-  tag: v0.14.0
+  tag: v0.15.0
   pullPolicy: IfNotPresent
 secret:
   labels: {}
@@ -66,8 +66,8 @@ env:
     LOG_JSON: true
     # disable use of index-cache.yaml
     DISABLE_STATEFILES: false
-    # disable Prometheus metrics
-    DISABLE_METRICS: true
+    # enable Prometheus metrics
+    ENABLE_METRICS: false
     # disable all routes prefixed with /api
     DISABLE_API: true
     # allow chart versions to be re-uploaded
