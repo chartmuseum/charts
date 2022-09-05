@@ -202,6 +202,7 @@ their default values. See values.yaml for all available options.
 | `deployment.labels`                     | Additional labels for deployment                                            | `{}`                                 |
 | `deployment.extraVolumes`               | Additional volumes for deployment                                           | `[]`                                 |
 | `deployment.extraVolumeMounts`          | Additional volumes to mount in container for deployment                     | `[]`                                 |
+| `deployment.sidecarContainers`          | Additional containers to run in the pod                                     | `{}`                                 |
 | `podAnnotations`                        | Annotations for pods                                                        | `{}`                                 |
 | `podLabels`                             | Labels for pods                                                             | `{}`                                 |
 | `ingress.enabled`                       | Enable ingress controller resource                                          | `false`                              |
