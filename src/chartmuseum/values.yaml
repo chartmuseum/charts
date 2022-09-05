@@ -129,8 +129,21 @@ deployment:
   #   name: value
   # additional volumes
   extraVolumes: []
+  #  - name: oidc-proxy-config
+  #    secret:
+  #      secretName: oidc-proxy-config
   # additional volumes to mount
   extraVolumeMounts: []
+  # sidecars
+  sidecarContainers: {}
+  # Example sidecarContainer with additional volume
+  #  proxy:
+  #    image: oidc-api-proxy:latest
+  #    volumeMounts:
+  #      - name: oidc-proxy-config
+  #        readOnly: true
+  #        mountPath: /etc/oidc-proxy
+        
 
 ## Pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
