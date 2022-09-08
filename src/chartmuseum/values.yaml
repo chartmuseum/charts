@@ -129,20 +129,23 @@ deployment:
   #   name: value
   # additional volumes
   extraVolumes: []
-  #  - name: oidc-proxy-config
+  #  - name: nginx-config
   #    secret:
-  #      secretName: oidc-proxy-config
+  #      secretName: nginx-config
   # additional volumes to mount
   extraVolumeMounts: []
-  # sidecars
+  ## sidecarContainers for the Chartmuseum
+  # Can be used for exmple to add a proxy to the pod that does 
+  # scanning for secrets, signing, authentication, validation 
+  # of the chart's content and so on.
   sidecarContainers: {}
-  # Example sidecarContainer with additional volume
+  ## Example sidecarContainer which uses an extraVolume from above
   #  proxy:
-  #    image: oidc-api-proxy:latest
+  #    image: nginx:latest
   #    volumeMounts:
-  #      - name: oidc-proxy-config
+  #      - name: nginx-config
   #        readOnly: true
-  #        mountPath: /etc/oidc-proxy
+  #        mountPath: /etc/nginx
         
 
 ## Pod annotations
