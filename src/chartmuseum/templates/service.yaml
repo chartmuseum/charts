@@ -34,14 +34,13 @@ spec:
   - port: {{ .Values.service.externalPort }}
 {{- if (and (eq .Values.service.type "NodePort") (not (empty .Values.service.nodePort))) }}
     nodePort: {{.Values.service.nodePort}}
-{{- else }}
+{{- end }}
 {{- if .Values.service.targetPort }}
     targetPort: {{ .Values.service.targetPort }}
     name: {{ .Values.service.targetPort }}
 {{- else }}
     targetPort: http
     name: http
-{{- end }}
 {{- end }}
     protocol: TCP
     
