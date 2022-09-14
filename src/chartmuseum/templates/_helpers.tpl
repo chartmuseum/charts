@@ -54,6 +54,9 @@ Selector labels
 {{- define "chartmuseum.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "chartmuseum.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
+{{- if .Values.commonLabels}}
+{{ toYaml .Values.commonLabels }}
+{{- end }}
 {{- end }}
 
 {{/*
