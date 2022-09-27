@@ -129,8 +129,27 @@ deployment:
   #   name: value
   # additional volumes
   extraVolumes: []
+  #  - name: nginx-config
+  #    secret:
+  #      secretName: nginx-config
   # additional volumes to mount
   extraVolumeMounts: []
+  ## sidecarContainers for the Chartmuseum
+  # Can be used to add a proxy to the pod that does
+  # scanning for secrets, signing, authentication, validation
+  # of the chart's content, send notifications...
+  sidecarContainers: {}
+  ## Example sidecarContainer which uses an extraVolume from above and
+  ## a named port that can be referenced in the service as targetPort.
+  #  proxy:
+  #    image: nginx:latest
+  #    ports:
+  #      - name: proxy
+  #        containerPort: 8081
+  #    volumeMounts:
+  #      - name: nginx-config
+  #        readOnly: true
+  #        mountPath: /etc/nginx
 
 ## Pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
@@ -156,6 +175,10 @@ service:
   loadBalancerSourceRanges: []
   # clusterIP: None
   externalPort: 8080
+  ## targetPort of the container to use. If a sidecar should handle the
+  ## requests first, use the named port from the sidecar. See sidecar example
+  ## from deployment above. Leave empty to use chartmuseum directly.
+  targetPort:
   nodePort:
   annotations: {}
   labels: {}

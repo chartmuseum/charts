@@ -152,6 +152,12 @@ spec:
           mountPath: /var/keys
           readOnly: true
 {{- end }}
+{{- if .Values.deployment.sidecarContainers }}
+{{- range $name, $spec :=  .Values.deployment.sidecarContainers }}
+      - name: {{ $name }}
+{{- toYaml $spec | nindent 8 }}
+{{- end }}
+{{- end }}
       {{- with .Values.resources }}
         resources:
 {{ toYaml . | indent 10 }}
