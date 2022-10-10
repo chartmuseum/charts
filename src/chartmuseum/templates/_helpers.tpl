@@ -45,6 +45,9 @@ helm.sh/chart: {{ include "chartmuseum.chart" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
+{{- if .Values.commonLabels}}
+{{ toYaml .Values.commonLabels }}
+{{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
 
@@ -54,9 +57,6 @@ Selector labels
 {{- define "chartmuseum.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "chartmuseum.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
-{{- if .Values.commonLabels}}
-{{ toYaml .Values.commonLabels }}
-{{- end }}
 {{- end }}
 
 {{/*
