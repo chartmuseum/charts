@@ -9,6 +9,10 @@ image:
   pullPolicy: IfNotPresent
 secret:
   labels: {}
+## Labels to apply to all resources
+##
+commonLabels: {}
+# team_name: dev
 env:
   open:
     # storage backend, can be one of: local, alibaba, amazon, google, microsoft, oracle
