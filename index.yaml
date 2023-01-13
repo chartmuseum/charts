@@ -3,6 +3,28 @@ entries:
   chartmuseum:
   - apiVersion: v2
     appVersion: 0.15.0
+    created: "2023-01-13T17:55:35.294118964Z"
+    description: Host your own Helm Chart Repository
+    digest: a8412e8fbe6527372a5d65e69b71a62447f90d52118252cc011fe21c85937069
+    home: https://github.com/helm/chartmuseum
+    icon: https://raw.githubusercontent.com/chartmuseum/charts/main/logo.jpg
+    keywords:
+    - chartmuseum
+    - helm
+    - charts repo
+    maintainers:
+    - name: chartmuseum
+      url: https://github.com/chartmuseum
+    name: chartmuseum
+    sources:
+    - https://github.com/chartmuseum/charts/tree/main/src/chartmuseum
+    - https://github.com/chartmuseum
+    - https://github.com/helm/chartmuseum
+    urls:
+    - https://github.com/chartmuseum/charts/releases/download/chartmuseum-3.9.3/chartmuseum-3.9.3.tgz
+    version: 3.9.3
+  - apiVersion: v2
+    appVersion: 0.15.0
     created: "2022-11-28T18:37:25.214414046Z"
     description: Host your own Helm Chart Repository
     digest: 4cc541776052e38e2e4dba315cc6c722bb26684eb6bf45846cc6fc58c0616506
@@ -442,4 +464,4 @@ entries:
     urls:
     - https://github.com/chartmuseum/charts/releases/download/chartmuseum-2.14.2/chartmuseum-2.14.2.tgz
     version: 2.14.2
-generated: "2022-11-28T18:37:25.21456745Z"
+generated: "2023-01-13T17:55:35.294434779Z"
