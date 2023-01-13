@@ -5,7 +5,6 @@ metadata:
   name: {{ .Values.persistence.pv.pvname | default (include "chartmuseum.fullname" .) }}
   labels:
     {{- include "chartmuseum.labels" . | nindent 4 }}
-    {{- include "chartmuseum.selectorLabels" . | nindent 4 }}
 spec:
   capacity:
     storage: {{ .Values.persistence.pv.capacity.storage }}
