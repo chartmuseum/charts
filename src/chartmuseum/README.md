@@ -15,6 +15,10 @@ Please also see https://github.com/helm/chartmuseum
   - [Prerequisites](#prerequisites)
   - [Configuration](#configuration)
   - [Installation](#installation)
+    - [Add repository](#add-repository)
+    - [Install chart (Helm v3)](#install-chart-helm-v3)
+    - [Install chart (Helm v2)](#install-chart-helm-v2)
+    - [Installation using custom config](#installation-using-custom-config)
     - [Using with Amazon S3](#using-with-amazon-s3)
       - [permissions grant with access keys](#permissions-grant-with-access-keys)
       - [permissions grant with IAM instance profile](#permissions-grant-with-iam-instance-profile)
@@ -550,7 +554,7 @@ kubectl create secret generic chartmuseum-secret --from-file=config=".oci/config
 Then you can either use a `VALUES` yaml with your values or set those values in the command line:
 
 ```shell
-helm install chartmuseum/chartmuseum --debug  --set env.open.STORAGE=oracle,env.open.STORAGE_ORACLE_COMPARTMENTID=ocid1.compartment.oc1..abc123,env.open.STORAGE_ORACLE_BUCKET=myocibucket,env.open.STORAGE_ORACLE_PREFIX=chartmuseum,oracle.secret.enabled=true,oracle.secret.name=chartmuseum-secret
+helm install chartmuseum/chartmuseum --debug  --set env.open.STORAGE=oracle,env.open.STORAGE_ORACLE_COMPARTMENTID=ocid1.compartment.oc1..abc123,env.open.STORAGE_ORACLE_BUCKET=myocibucket,env.open.STORAGE_ORACLE_PREFIX=chartmuseum,oracle.secret.enabled=true,oracle.secret.name=chartmuseum-secret,env.open.OCI_CONFIG_FILE=/home/chartmuseum/.oci/config
 ```
 
 If you prefer to use a yaml file:
@@ -562,6 +566,7 @@ env:
     STORAGE_ORACLE_COMPARTMENTID: ocid1.compartment.oc1..abc123
     STORAGE_ORACLE_BUCKET:        myocibucket
     STORAGE_ORACLE_PREFIX:        chartmuseum
+    OCI_CONFIG_FILE:              /home/chartmuseum/.oci/config
 
 oracle:
   secret:
