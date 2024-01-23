@@ -278,6 +278,7 @@ persistence:
       storage: 8Gi
     accessMode: ReadWriteOnce
     nfs:
+      enabled: false
       server:
       path:
 
