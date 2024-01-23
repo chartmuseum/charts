@@ -355,3 +355,12 @@ bearerAuth:
   secret:
     enabled: false
     publicKeySecret: chartmuseum-public-key
+
+# Configure Pod Distruption Budget
+podDisruptionBudget:
+  # Specifies whether a PodDisruptionBudget should be created
+  enabled: false
+  # The minimum number of pods that must be available simultaneously.  This is a pointer to distinguish between explicit zero and not specified.
+  minAvailable: 1
+  # The maximum number of pods that may be unavailable simultaneously.  This is a pointer to distinguish between explicit zero and not specified.
+  maxUnavailable: ""

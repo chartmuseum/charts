@@ -1,0 +1,15 @@
+{{- if .Values.podDisruptionBudget.enabled -}}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "chartmuseum.fullname" . }}
+  labels:
+    {{- include "chartmuseum.labels" . | nindent 4 }}
+    {{- include "chartmuseum.selectorLabels" . | nindent 4 }}
+spec:
+  minAvailable: {{ .Values.podDisruptionBudget.minAvailable }}
+  maxUnavailable: {{ .Values.podDisruptionBudget.maxUnavailable }}
+  selector:
+    matchLabels:
+      {{- include "chartmuseum.selectorLabels" . | nindent 6 }}
+{{- end }}
