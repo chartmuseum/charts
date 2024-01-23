@@ -2,6 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ .Values.service.servicename | default (include "chartmuseum.fullname" .) }}
+  namespace: {{ .Release.Namespace }}
   {{- with .Values.service.annotations }}
   annotations:
   {{- toYaml . | nindent 4 }}
