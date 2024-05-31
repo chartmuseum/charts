@@ -5,7 +5,7 @@ strategy:
   type: RollingUpdate
 image:
   repository: ghcr.io/helm/chartmuseum
-  tag: v0.16.1
+  tag: v0.16.2
   pullPolicy: IfNotPresent
 secret:
   labels: {}
