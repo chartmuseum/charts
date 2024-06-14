@@ -170,6 +170,17 @@ spec:
       affinity:
 {{ toYaml . | indent 8 }}
     {{- end }}
+    {{- with .Values.topologySpreadConstraints }}
+      topologySpreadConstraints:
+        {{- range $constraint := . }}
+      - {{ toYaml $constraint | nindent 8 | trim }}
+        {{- if not $constraint.labelSelector }}
+        labelSelector:
+          matchLabels:
+            {{- include "chartmuseum.selectorLabels" $ | nindent 12 }}
+        {{- end }}
+        {{- end }}
+    {{- end }}
     {{- with .Values.tolerations }}
       tolerations:
 {{ toYaml . | indent 8 }}
