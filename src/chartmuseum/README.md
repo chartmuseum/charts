@@ -167,6 +167,7 @@ their default values. See values.yaml for all available options.
 | `env.secret.BASIC_AUTH_PASS`            | Password for basic HTTP authentication                                      | `<nil>`                              |
 | `env.secret.GOOGLE_CREDENTIALS_JSON`    | GCP service account json file                                               | `<nil>`                              |
 | `env.secret.CACHE_REDIS_PASSWORD`       | Redis requirepass server configuration                                      | `<nil>`                              |
+| `command`                               | Override the default `ENTRYPOINT` (`["/chartmuseum"]`) of the container     | `<nil>`                              |
 | `extraArgs`                             | Pass extra arguments to the chartmuseum binary                              | `[]`                                 |
 | `probes.liveness.initialDelaySeconds`   | Delay before liveness probe is initiated                                    | `5`                                  |
 | `probes.liveness.periodSeconds`         | How often (in seconds) to perform the liveness probe                        | `10`                                 |

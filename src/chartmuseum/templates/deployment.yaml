@@ -108,6 +108,10 @@ spec:
         -  name: AUTH_CERT_PATH
            value: /var/keys/public-key.pem
 {{ end }}
+{{- if .Values.command }}
+        command:
+{{ toYaml .Values.command | indent 8 }}
+{{- end }}
         args:
         - --port=8080
 {{- if eq .Values.env.open.STORAGE "local" }}
