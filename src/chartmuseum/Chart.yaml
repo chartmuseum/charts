@@ -1,8 +1,8 @@
 apiVersion: v2
 description: Host your own Helm Chart Repository
 name: chartmuseum
-version: 3.10.3
-appVersion: 0.16.2
+version: 3.10.4
+appVersion: 0.16.3
 home: https://github.com/helm/chartmuseum
 icon: https://raw.githubusercontent.com/chartmuseum/charts/main/logo.jpg
 keywords:
